@@ -293,3 +293,19 @@ class Inventory(models.Model):
             else:
                 raise ValidationError(_('There are some incorrect Internal reference entered. Please enter exact internal reference!'))
         return super(Inventory, self)._get_inventory_lines_values()
+
+
+class ResPartner(models.Model):
+
+    _inherit = 'res.partner'
+
+    @api.model
+    def _name_search(self, name, args=None, operator='ilike',
+                     limit=100, name_get_uid=None):
+        res = super(ResPartner, self)._name_search(
+            name=name, args=args, operator=operator, limit=limit, name_get_uid=name_get_uid)
+        context = self._context
+        if 'is_supplier' in context:
+            supplier_list = self.sudo().search([('supplier','=',True),('parent_id','=',False)])
+            return supplier_list.name_get()
+        return res
