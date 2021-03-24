@@ -148,10 +148,14 @@
                 </t>
                 <span t-field="line.price_reduce_taxexcl" style="white-space: nowrap;"
                       t-options="{'widget': 'monetary', 'from_currency': website_sale_order.pricelist_id.currency_id, 'display_currency': website.currency_id}"
-                      groups="sale.group_show_price_subtotal"/>
+                      groups="account.group_show_line_subtotals_tax_excluded"/>
+                <!-- Previous group sale.group_show_price_total(v11)
+                Added group account.group_show_line_subtotals_tax_excluded(v12) by Ganesh on 24/03/2021. -->
                 <span t-field="line.price_reduce_taxinc" style="white-space: nowrap;"
                       t-options="{'widget': 'monetary', 'from_currency': website_sale_order.pricelist_id.currency_id, 'display_currency': website.currency_id}"
-                      groups="sale.group_show_price_total"/>
+                      groups="account.group_show_line_subtotals_tax_included"/>
+                <!-- Previous group sale.group_show_price_total(v11)
+                Added group account.group_show_line_subtotals_tax_included(v12) by Ganesh on 24/03/2021. -->
             </td>
         </xpath>
         <xpath expr="//td[hasclass('td-product_name')]" position="replace">
