@@ -73,8 +73,6 @@ class ProductTemplate(models.Model):
                     price_without_pricelist = company_id.currency_id.compute(price_without_pricelist,
                                                                              pricelist.currency_id)
                 price_without_pricelist = taxes.compute_all(price_without_pricelist, pricelist.currency_id)[tax_display]
-                product.website_price_difference = True if float_compare(price_without_pricelist, product.website_price,
-                                                                   precision_rounding=pricelist.currency_id.rounding) > 0 else False
                 if sales_pricelist:
                     list_price = \
                     taxes.compute_all(price_without_pricelist, pricelist.currency_id, quantity_1, product,
@@ -83,10 +81,6 @@ class ProductTemplate(models.Model):
                     list_price = \
                         taxes.compute_all(combination_info['list_price'], pricelist.currency_id, quantity_1, product,
                                       partner)[tax_display]
-                # list_price = \
-                #     taxes.compute_all(combination_info['list_price'], pricelist.currency_id, quantity_1, product,
-                #                       partner)[
-                #         tax_display]
             else:
                 list_price = price
             has_discounted_price = pricelist.currency_id.compare_amounts(list_price, price) == 1
