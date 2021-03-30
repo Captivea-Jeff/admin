@@ -28,25 +28,31 @@ odoo.define('bista_website_sale_options.website_sale_options', function (require
                     }, weContext.get()),
                 }
             })
-                .then(function (modalContent) {
-                    if (modalContent) {
-                        var $modalContent = $(modalContent);
-                        $modalContent = self._postProcessContent($modalContent);
-                        self.$content = $modalContent;
-                    } else {
-                        self.trigger('options_empty');
-                        self.preventOpening = true;
-                    }
-                    setTimeout(function () {
-                        $('.modal-footer button.btn-secondary').trigger('click');
-                    }, 3000);
-                    setTimeout(function () {
-                        self.container[0].className = "";
-                    }, 3000);
-                });
+            .then(function (modalContent) {
+                if (modalContent) {
+                    var $modalContent = $(modalContent);
+                    $modalContent = self._postProcessContent($modalContent);
+                    self.$content = $modalContent;
+                    self._trigger(self);
+                } else {
+                    self.trigger('options_empty');
+                    self.preventOpening = true;
+                }
+            });
 
             var parentInit = self._super.apply(self, arguments);
             return $.when(getModalContent, parentInit);
         },
+        _trigger: function(action){
+            var header = action.$modal[0];
+            var title = $(header).find(".modal-title")[0];
+            title.innerText = "Product successfully added to your shopping cart";
+            var footer = action.$footer[0];
+            $(footer).hide();
+            var btn = footer.firstChild;
+            setTimeout(function () {
+                $(btn).trigger('click');
+            }, 3000);
+        }
     });
 });
