@@ -27,10 +27,6 @@ class WebsiteSale(WebsiteSale):
             redirect_url = '/web/login?redirect=%s'%(request.httprequest.url)
             if current_website.website_shop_login_redirect:
                 redirect_url = '%s?redirect=%s'%(current_website.website_shop_login_redirect, request.httprequest.url)
-            # else:
-            #     # redirct user to /web/signup if b2c signup is enable
-            #     if current_website.website_auth_signup_uninvited == 'b2c':
-            #         redirect_url = '/web/signup?redirect=%s'%(request.httprequest.url)
             return request.redirect(redirect_url)
 
         add_qty = int(post.get('add_qty', 1))
@@ -142,8 +138,8 @@ class WebsiteSale(WebsiteSale):
             post['order'] = "publish_date desc"
             node_field = "publish_date"
 
-        if node_field == 'sales_pricelist' or node_field == 'publish_date':
-            product_list_values = self._company_dependent_order_by_sale(company_id, Product, categs, domain,
+        if node_field == 'sales_pricelist' or node_field == 'publish_date' and post.get('search') is None:
+            product_list_values = self._company_dependent_order_by_sale(company_id, search_product, categs, domain,
                                                                         sale_product_id, url, page, ppg,
                                                                         post)
             product_list = product_list_values.get('product_list')
@@ -151,7 +147,9 @@ class WebsiteSale(WebsiteSale):
             pager = product_list_values.get('pager')
 
         if len(product_list) > 0 and post.get('search') is None:
-            products = Product.browse(product_list)
+            products = Product.sudo().browse(product_list)
+            # products = Product.browse(product_list)
+            # products = Product.search([('id', 'in', product_list)])
         else:
             product_count = len(search_product)
             pager = request.website.pager(url=url, total=product_count, page=page, step=ppg, scope=7, url_args=post)
@@ -209,15 +207,15 @@ class WebsiteSale(WebsiteSale):
             else:
                 order = "value_float " + str(node_order)
 
-            if categs:
-                domain += [('public_categ_ids', 'child_of', [x.id for x in categs])]
-                domain_id = [('id', 'in', sale_product_id)]
-                categs_domain = domain_id + domain
-                product_ids = Product.search(categs_domain).ids
+            product_ids = Product.sudo().browse(sale_product_id)
+            # product_ids = Product.browse(sale_product_id)
+            # product_ids = Product.search([('id', 'in', sale_product_id)])
 
             res_ids = []
-            for res_id in product_ids:
-                res_ids.append('product.template,' + str(res_id))
+            pro_vals = product_ids
+            for res_id in pro_vals:
+                if res_id.website_published and res_id.sale_ok:
+                    res_ids.append('product.template,' + str(res_id.id))
 
             if len(res_ids) > 0:
                 ir_domain += [('res_id', 'in', res_ids)]

@@ -33,10 +33,6 @@ class WebsiteSale(WebsiteSale):
             redirect_url = '/web/login?redirect=%s' % (request.httprequest.url)
             if current_website.website_shop_login_redirect:
                 redirect_url = '%s?redirect=%s' % (current_website.website_shop_login_redirect, request.httprequest.url)
-            # else:
-            #     # redirct user to /web/signup if b2c signup is enable
-            #     if current_website.website_auth_signup_uninvited == 'b2c':
-            #         redirect_url = '/web/signup?redirect=%s'%(request.httprequest.url)
             return request.redirect(redirect_url)
 
         add_qty = int(post.get('add_qty', 1))
@@ -96,11 +92,17 @@ class WebsiteSale(WebsiteSale):
                 parent_category_ids.append(current_category.parent_id.id)
                 current_category = current_category.parent_id
 
+        res_ids = []
+        pro_vals = Product.search(domain)
+        for res_id in pro_vals:
+            if res_id.website_published and res_id.sale_ok:
+                res_ids.append('product.template,' + str(res_id.id))
+
         ir_property = request.env['ir.property']
-        ir_domain = [('name', '=', 'bck_stock_date'), ('company_id', '=', current_website.company_id.id)]
+        ir_domain = [('res_id', 'in', res_ids), ('name', '=', 'bck_stock_date'), ('company_id', '=', current_website.company_id.id)]
         order = "value_datetime desc"
 
-        product_count = len(search_product)
+        product_count = ir_property.search_count(ir_domain)
         pager = request.website.pager(url=url, total=product_count, page=page, step=ppg, scope=7, url_args=post)
         ir_property_ids = ir_property.search(ir_domain, limit=ppg, offset=pager['offset'], order=order)
 

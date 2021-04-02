@@ -30,10 +30,6 @@ class WebsiteSale(WebsiteSale):
             redirect_url = '/web/login?redirect=%s' % (request.httprequest.url)
             if current_website.website_shop_login_redirect:
                 redirect_url = '%s?redirect=%s' % (current_website.website_shop_login_redirect, request.httprequest.url)
-            # else:
-            #     # redirct user to /web/signup if b2c signup is enable
-            #     if current_website.website_auth_signup_uninvited == 'b2c':
-            #         redirect_url = '/web/signup?redirect=%s'%(request.httprequest.url)
             return request.redirect(redirect_url)
 
         add_qty = int(post.get('add_qty', 1))
@@ -110,7 +106,7 @@ class WebsiteSale(WebsiteSale):
             post['order'] = "publish_date desc"
             node_field = "publish_date"
 
-        if node_field == 'sales_pricelist' or node_field == 'publish_date':
+        if node_field == 'sales_pricelist' or node_field == 'publish_date' and post.get('search') is None:
             product_list_values = self._company_dependent_order_by(company_id, Product, categs, domain, url, page, ppg,
                                                                    post)
             product_list = product_list_values.get('product_list')
@@ -181,8 +177,10 @@ class WebsiteSale(WebsiteSale):
                 product_ids = Product.search(domain).ids
 
             res_ids = []
-            for res_id in product_ids:
-                res_ids.append('product.template,' + str(res_id))
+            pro_vals = Product.browse(product_ids)
+            for res_id in pro_vals:
+                if res_id.website_published and res_id.sale_ok:
+                    res_ids.append('product.template,' + str(res_id.id))
 
             if len(res_ids) > 0:
                 ir_domain += [('res_id', 'in', res_ids)]
