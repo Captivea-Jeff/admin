@@ -214,8 +214,8 @@ class WebsiteSale(WebsiteSale):
             res_ids = []
             pro_vals = product_ids
             for res_id in pro_vals:
-                if res_id.website_published and res_id.sale_ok:
-                    res_ids.append('product.template,' + str(res_id.id))
+                # if res_id.website_published and res_id.sale_ok:
+                res_ids.append('product.template,' + str(res_id.id))
 
             if len(res_ids) > 0:
                 ir_domain += [('res_id', 'in', res_ids)]

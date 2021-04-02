@@ -95,8 +95,8 @@ class WebsiteSale(WebsiteSale):
         res_ids = []
         pro_vals = Product.search(domain)
         for res_id in pro_vals:
-            if res_id.website_published and res_id.sale_ok:
-                res_ids.append('product.template,' + str(res_id.id))
+            # if res_id.website_published and res_id.sale_ok:
+            res_ids.append('product.template,' + str(res_id.id))
 
         ir_property = request.env['ir.property']
         ir_domain = [('res_id', 'in', res_ids), ('name', '=', 'bck_stock_date'), ('company_id', '=', current_website.company_id.id)]
