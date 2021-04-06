@@ -17,6 +17,32 @@ class ProductTemplate(models.Model):
                     values += [str(product_variant_id.id)]
             return values
 
+    @api.multi
+    def action_product_sale_list(self):
+        return {
+            'name': "Sales Order Line",
+            'context': {'search_default_product_tmpl_id': self.id, 'default_product_tmpl_id': self.id},
+            'view_mode': 'tree',
+            'res_model': 'sale.order.line',
+            'view_id': self.env.ref('sale.view_order_line_tree').id,
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+            'domain': [('state', 'in', ['sale', 'done'])]
+        }
+
+    @api.multi
+    def action_product_purchase_list(self):
+        return {
+            'name': "Purchase Order Line",
+            'context': {'search_default_product_tmpl_id': self.id, 'default_product_tmpl_id': self.id},
+            'view_mode': 'tree',
+            'res_model': 'purchase.order.line',
+            'view_id': self.env.ref('purchase.purchase_order_line_tree').id,
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+            'domain': [('state', 'in', ['purchase', 'done'])]
+        }
+
 
 # Following specifiaction masters conatins a value to show in website
 # specification section
@@ -90,3 +116,33 @@ class ProductSpecificationAttributevalue(models.Model):
         ('value_company_uniq', 'unique (name,specification_id)',
          'This attribute value already exists !')
     ]
+
+
+class ProductProduct(models.Model):
+    _inherit = 'product.product'
+
+    @api.multi
+    def action_product_sale_list(self):
+        return {
+            'name': "Sales Order Line",
+            'context': {'search_default_product_id': self.id, 'default_product_id': self.id},
+            'view_mode': 'tree',
+            'res_model': 'sale.order.line',
+            'view_id': self.env.ref('sale.view_order_line_tree').id,
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+            'domain': [('state', 'in', ['sale', 'done'])]
+        }
+
+    @api.multi
+    def action_product_purchase_list(self):
+        return {
+            'name': "Purchase Order Line",
+            'context': {'search_default_product_tmpl_id': self.id, 'default_product_tmpl_id': self.id},
+            'view_mode': 'tree',
+            'res_model': 'purchase.order.line',
+            'view_id': self.env.ref('purchase.purchase_order_line_tree').id,
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+            'domain': [('state', 'in', ['purchase', 'done'])]
+        }
