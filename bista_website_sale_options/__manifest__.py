@@ -35,4 +35,5 @@
     #    ],
     # "images": ["static/description/groupexpand.png"],
     "installable": True,
+    "auto_install": False,
 }
