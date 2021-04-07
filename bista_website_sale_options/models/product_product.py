@@ -19,9 +19,10 @@ class ProductTemplate(models.Model):
 
     @api.multi
     def action_product_sale_list(self):
+        product_id = self.env['product.product'].search([('product_tmpl_id', '=', self.id)])
         return {
             'name': "Sales Order Line",
-            'context': {'search_default_product_tmpl_id': self.id, 'default_product_tmpl_id': self.id},
+            'context': {'search_default_product_id': product_id.id, 'default_product_id': product_id.id},
             'view_mode': 'tree',
             'res_model': 'sale.order.line',
             'view_id': self.env.ref('sale.view_order_line_tree').id,
@@ -32,9 +33,10 @@ class ProductTemplate(models.Model):
 
     @api.multi
     def action_product_purchase_list(self):
+        product_id = self.env['product.product'].search([('product_tmpl_id', '=', self.id)])
         return {
             'name': "Purchase Order Line",
-            'context': {'search_default_product_tmpl_id': self.id, 'default_product_tmpl_id': self.id},
+            'context': {'search_default_product_id': product_id.id, 'default_product_id': product_id.id},
             'view_mode': 'tree',
             'res_model': 'purchase.order.line',
             'view_id': self.env.ref('purchase.purchase_order_line_tree').id,
@@ -138,7 +140,7 @@ class ProductProduct(models.Model):
     def action_product_purchase_list(self):
         return {
             'name': "Purchase Order Line",
-            'context': {'search_default_product_tmpl_id': self.id, 'default_product_tmpl_id': self.id},
+            'context': {'search_default_product_id': self.id, 'default_product_id': self.id},
             'view_mode': 'tree',
             'res_model': 'purchase.order.line',
             'view_id': self.env.ref('purchase.purchase_order_line_tree').id,
