@@ -26,7 +26,7 @@ class ProductTemplate(models.Model):
             'res_model': 'sale.order.line',
             'view_id': self.env.ref('sale.view_order_line_tree').id,
             'type': 'ir.actions.act_window',
-            'target': 'new',
+            'target': 'current',
             'domain': [('state', 'in', ['sale', 'done'])]
         }
 
@@ -39,7 +39,7 @@ class ProductTemplate(models.Model):
             'res_model': 'purchase.order.line',
             'view_id': self.env.ref('purchase.purchase_order_line_tree').id,
             'type': 'ir.actions.act_window',
-            'target': 'new',
+            'target': 'current',
             'domain': [('state', 'in', ['purchase', 'done'])]
         }
 
@@ -130,7 +130,7 @@ class ProductProduct(models.Model):
             'res_model': 'sale.order.line',
             'view_id': self.env.ref('sale.view_order_line_tree').id,
             'type': 'ir.actions.act_window',
-            'target': 'new',
+            'target': 'current',
             'domain': [('state', 'in', ['sale', 'done'])]
         }
 
@@ -143,6 +143,6 @@ class ProductProduct(models.Model):
             'res_model': 'purchase.order.line',
             'view_id': self.env.ref('purchase.purchase_order_line_tree').id,
             'type': 'ir.actions.act_window',
-            'target': 'new',
+            'target': 'current',
             'domain': [('state', 'in', ['purchase', 'done'])]
         }
