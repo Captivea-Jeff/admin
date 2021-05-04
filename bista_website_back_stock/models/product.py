@@ -7,8 +7,9 @@ from datetime import datetime
 
 _logger = logging.getLogger(__name__)
 
+
 class Product(models.Model):
-    _inherit='product.product'
+    _inherit = 'product.product'
 
     @api.multi
     def write(self, vals):
@@ -28,7 +29,7 @@ class Product(models.Model):
                 rec.product_tmpl_id.update({"bck_stock_date": datetime.now()})
             else:
                 rec.product_tmpl_id.update({"bck_stock_date": bck_stock_date})
+                vals['is_website_publish'] = False
 
         result = super(Product, self).write(vals)
-
         return result

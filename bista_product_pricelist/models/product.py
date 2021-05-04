@@ -23,8 +23,12 @@ class Product(models.Model):
 
         context = dict(self._context, pricelist=pricelist.id, partner=partner)
         self2 = self.with_context(context) if self._context != context else self
+        # Code present in v11.Commented the code by Ganesh on 23/03/2021 as group_show_price_subtotal
+        # was moved from sale to account module and renamed to group_show_line_subtotals_tax_excluded.
+        # ret = self.env.user.has_group('sale.group_show_price_subtotal') and 'total_excluded' or 'total_included'
 
-        ret = self.env.user.has_group('sale.group_show_price_subtotal') and 'total_excluded' or 'total_included'
+        # Code updated for v12 by Ganesh on 23/03/2021.
+        ret = self.env.user.has_group('account.group_show_line_subtotals_tax_excluded') and 'total_excluded' or 'total_included'
 
         for p, p2 in pycompat.izip(self, self2):
             taxes = partner.property_account_position_id.map_tax(p.sudo().taxes_id.filtered(lambda x: x.company_id == company_id))

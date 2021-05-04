@@ -8,11 +8,52 @@ odoo.define("pos_product_available_negative.pos", function (require) {
     var models = require("point_of_sale.models");
     var core = require("web.core");
     var _t = core._t;
-    var popups = require('point_of_sale.popups');
+    var PopupWidget = require('point_of_sale.popups');
     var gui = require('point_of_sale.gui');
 
+    var PackLotLinePopupWidget = PopupWidget.extend({
+        template: 'PackLotLinePopupWidget',
+        click_confirm: function () {
+            var pack_lot_lines = this.options.pack_lot_lines;
+            this.$('.packlot-line-input').each(function (index, el) {
+                var cid = $(el).attr('cid'),
+                    lot_name = $(el).val();
+                var pack_line = pack_lot_lines.get({cid: cid});
+                pack_line.set_lot_name(lot_name);
+            });
+            pack_lot_lines.remove_empty_model();
+            pack_lot_lines.set_quantity_by_lot();
+            this.options.order.save_to_db();
+            this.options.order_line.trigger('change', this.options.order_line);
+            this.gui.close_popup();
+            if (pack_lot_lines.order_line.product.type === "product" && pack_lot_lines.order_line.product.qty_available <= 0 && this.pos.config.negative_order_warning) {
+                this.pos.gui.show_popup("alertMsg", {
+                    title: _t("STOCK CHECK WARNING"),
+                    body: _t('This product quantity may be unavailable'),
+                    msg: _t('Please verify the product quantity available and notify a supervisor of any discrepancies.'),
+                });
+                pack_lot_lines.order_line.notify_qty = true;
+            }
+        },
+        click_cancel: function () {
+            this.gui.close_popup();
+            if (this.options.cancel) {
+                this.options.cancel.call(this);
+            }
+            var pack_lot_lines = this.options.pack_lot_lines;
+            if (pack_lot_lines.order_line.product.type === "product" && pack_lot_lines.order_line.product.qty_available <= 0 && this.pos.config.negative_order_warning) {
+                this.pos.gui.show_popup("alertMsg", {
+                    title: _t("STOCK CHECK WARNING"),
+                    body: _t('This product quantity may be unavailable'),
+                    msg: _t('Please verify the product quantity available and notify a supervisor of any discrepancies.'),
+                });
+                pack_lot_lines.order_line.notify_qty = true;
+            }
+        },
+    });
+    gui.define_popup({name: 'packlotline', widget: PackLotLinePopupWidget});
 
-    var CustomMsgPopupWidget = popups.extend({
+    var CustomMsgPopupWidget = PopupWidget.extend({
         template: 'CustomMsgPopupWidget',
         show: function (options) {
             options = options || {};
@@ -37,13 +78,6 @@ odoo.define("pos_product_available_negative.pos", function (require) {
 
     var _super_order = models.Order.prototype;
     models.Order = models.Order.extend({
-        export_as_JSON: function () {
-            var json = _super_order.export_as_JSON.apply(this, arguments);
-            json.negative_stock_user_id = this.negative_stock_user_id
-                ? this.negative_stock_user_id.id
-                : false;
-            return json;
-        },
         add_product: function (product, options) {
             if (this._printed) {
                 this.destroy();
@@ -85,7 +119,7 @@ odoo.define("pos_product_available_negative.pos", function (require) {
             }
             if (to_merge_orderline) {
                 if (!to_merge_orderline.notify_qty) {
-                    if (to_merge_orderline.product.type === "product") {
+                    if (to_merge_orderline.product.type === "product" && this.pos.config.negative_order_warning) {
                         if (to_merge_orderline.quantity + 1 > line.product.qty_available) {
                             this.pos.gui.show_popup("alertMsg", {
                                 title: _t("STOCK CHECK WARNING"),
@@ -115,7 +149,7 @@ odoo.define("pos_product_available_negative.pos", function (require) {
                 var mode = this.numpad_state.get('mode');
                 if (mode === 'quantity') {
                     if (val != "" && val != "remove") {
-                        if (order.get_selected_orderline().product.type === "product") {
+                        if (order.get_selected_orderline().product.type === "product" && this.pos.config.negative_order_warning) {
                             if (!order.get_selected_orderline().notify_qty) {
                                 var qty_available = order.get_selected_orderline().product.qty_available;
                                 if (val > qty_available) {
@@ -144,21 +178,17 @@ odoo.define("pos_product_available_negative.pos", function (require) {
         init: function (parent, options) {
             var self = this;
             this._super(parent, options);
-            if (!this.pos.config.negative_order_warning) {
-                return;
-            }
-
             var click_product_handler_super = this.click_product_handler;
             this.click_product_handler = function () {
                 var product = self.pos.db.get_product_by_id(this.dataset.productId);
                 var order = self.pos.get_order();
-                if (product.type === "product" && product.qty_available <= 0) {
+                if (product.type === "product" && product.qty_available <= 0 && self.pos.config.negative_order_warning) {
                     self.gui.show_popup("alertMsg", {
                         title: _t("STOCK CHECK WARNING"),
                         body: _t('This product quantity may be unavailable'),
                         msg: _t('Please verify the product quantity available and notify a supervisor of any discrepancies.'),
                     });
-                } else if (product.type === "product") {
+                } else if (product.type === "product" && self.pos.config.negative_order_warning) {
                     if (order.get_selected_orderline() !== undefined) {
                         if (order.get_selected_orderline().product.id === product.id) {
                             if (!order.get_selected_orderline().notify_qty) {

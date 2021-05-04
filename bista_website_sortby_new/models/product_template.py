@@ -5,14 +5,12 @@ import logging
 from odoo import api, fields, models, tools, _
 from datetime import datetime
 from odoo.addons import decimal_precision as dp
-# from odoo.exceptions import UserError, ValidationError
-# from datetime import datetime
 
 _logger = logging.getLogger(__name__)
 
-class ProductTemplate(models.Model):
-    _inherit='product.template'
 
+class ProductTemplate(models.Model):
+    _inherit = 'product.template'
     publish_date = fields.Datetime('Publish Date', company_dependent=True)
 
     @api.multi
@@ -47,7 +45,4 @@ class ProductTemplate(models.Model):
                 vals['publish_date'] = None
 
         result = super(ProductTemplate, self).write(vals)
-
         return result
-
-

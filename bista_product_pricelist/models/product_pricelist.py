@@ -1,7 +1,7 @@
 # coding: utf-8
 
 import logging
-
+import itertools
 from odoo import api, fields, models, tools, _
 from odoo.exceptions import UserError, ValidationError
 from datetime import datetime
@@ -52,7 +52,7 @@ class Pricelist(models.Model):
             prod_tmpl_ids = [tmpl.id for tmpl in products]
             # all variants of all products
             prod_ids = [p.id for p in
-                        list(chain.from_iterable([t.product_variant_ids for t in products]))]
+                        list(itertools.chain.from_iterable([t.product_variant_ids for t in products]))]
         else:
             prod_ids = [product.id for product in products]
             prod_tmpl_ids = [product.product_tmpl_id.id for product in products]
@@ -69,7 +69,7 @@ class Pricelist(models.Model):
             'AND (item.pricelist_id = %s) '
             'AND (item.date_start IS NULL OR item.date_start<=%s) '
             'AND (item.date_end IS NULL OR item.date_end>=%s)'
-            'ORDER BY item.applied_on, item.min_quantity desc, categ.parent_left desc, item.date_end asc, item.date_start asc',
+            'ORDER BY item.applied_on, item.min_quantity desc, categ.complete_name desc, item.date_end asc, item.date_start asc',
             (prod_tmpl_ids, prod_ids, categ_ids, self.id, date, date))
 
         item_ids = [x[0] for x in self._cr.fetchall()]
@@ -98,7 +98,7 @@ class Pricelist(models.Model):
             # TDE SURPRISE: product can actually be a template
             price = product.price_compute('list_price')[product.id]
 
-            price_uom = self.env['product.uom'].browse([qty_uom_id])
+            price_uom = self.env['uom.uom'].browse([qty_uom_id])
             for rule in items:
                 if rule.min_quantity and qty_in_product_uom < rule.min_quantity:
                     continue
