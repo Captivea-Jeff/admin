@@ -2,7 +2,7 @@
 # Part of BistaSolutions. See LICENSE file for full copyright and licensing details.
 {
     'name': 'MAQ Point of Sale Calculator',
-    'version': '11.0.1.0.0',
+    'version': '12.0.1.0.0',
     'summary': 'Point of sale',
     'description': """
     MAQ Point of Sale Calculator code

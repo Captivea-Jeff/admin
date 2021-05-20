@@ -5,7 +5,7 @@ import logging
 import json
 
 from datetime import datetime
-from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT, DEFAULT_SERVER_DATE_FORMAT
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 
 from odoo import models, fields, api, _
 from odoo.exceptions import Warning, ValidationError
@@ -328,7 +328,10 @@ class ShopifyConfig(models.Model):
                 if options:
                     new_product.options = options
                 if variants:
-                    new_product.variants = variants
+                    product_variants = []
+                    for var in variants:
+                        product_variants.append(shopify.Variant(var))
+                    new_product.variants = product_variants
                 if images:
                     new_product.images = images
                 success = new_product.save()  # returns false if the record is invalid
@@ -540,12 +543,12 @@ class ShopifyConfig(models.Model):
                 _('Facing a problems while update a product quantity!: %s') % e)
 
     @api.multi
-    def test_import_orders(self):
+    def test_import_orders(self, shopify_order_id):
         """
         Fetch order ids from shopify with give condition and pass it to import_order function
         """
         self.test_connection()
-        shopify_order_id = 1346887714636
+#         shopify_order_id = 1346887714636
 #         shopify_orders = shopify.Order.find(
 #             status='any', financial_status='paid', fulfillment_status='fulfilled')
 #         for shopify_order in shopify_orders:
@@ -555,10 +558,10 @@ class ShopifyConfig(models.Model):
 #             status='any', financial_status='partially_refunded', fulfillment_status='partial')
 #         for shopify_order in shopify_orders:
 #             self.import_order(shopify_order.id)
-        order_company = self.sudo().get_shopify_order_company(1360243590988)
+        order_company = self.sudo().get_shopify_order_company(shopify_order_id)
 #         self.import_order(1706514022485, order_company, True)
         self.sudo(order_company.shopify_user_id.id).import_order(
-                            1360243590988, order_company, True)
+                            shopify_order_id, order_company, True)
         # self.import_order(1112794693725)
 
     def _process_so(self, odoo_so_rec, done_qty_vals = {}):
@@ -761,7 +764,7 @@ class ShopifyConfig(models.Model):
                 shopify_vendor_rec = order_company.shopify_vendor_id
                 if shopify_vendor_rec:
                     shopify_vendor_id = shopify_vendor_rec.id
-            
+
             shopify_warehouse_id = order_company.shopify_warehouse_id.id
             shopify_location_rec = order_company.shopify_location_id
             shopify_location_id = shopify_location_rec.id
@@ -1031,7 +1034,7 @@ class ShopifyConfig(models.Model):
                                                 product = product_variant_env.sudo(shopify_user_id).search(
                                                     [('default_code', '=', line_data.get('sku'))])
                                             if product:
-                                                today_date = datetime.today().date().strftime(DEFAULT_SERVER_DATE_FORMAT)
+                                                today_date = datetime.today().date()
                                                 prod_seller_ids = product.seller_ids
                                                 vendors = prod_seller_ids.filtered(lambda v: (v.name.id == shopify_vendor_id and v.product_id.id == product.id and v.date_start and v.date_start <= today_date and v.date_end and v.date_end >= today_date))
                                                 if not vendors:
