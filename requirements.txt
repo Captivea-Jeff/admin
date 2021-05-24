@@ -1,2 +1,2 @@
-ShopifyAPI==5.1.0
+ShopifyAPI==8.4.1
 
