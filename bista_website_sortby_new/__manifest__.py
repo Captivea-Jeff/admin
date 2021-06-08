@@ -3,7 +3,7 @@
 
 {
     "name": "Bista Website Sortby New Product",
-    "version": "11.0.1.0.0",
+    "version": "12.0.1.0.0",
     "author": "Bista Solutions Pvt. Ltd.",
     "maintainer": "Bista Solutions Pvt. Ltd.",
     "website": "https://www.bistasolutions.com",

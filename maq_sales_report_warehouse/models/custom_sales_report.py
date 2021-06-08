@@ -66,8 +66,8 @@ class SalesReport(models.Model):
     def _check_date(self):
         tommorrow_date = datetime.now() + timedelta(days=1)
         tommorrow_min_date = datetime.combine(tommorrow_date, time.min)
-        start_date = datetime.strptime(self.m_sales_start_date, DEFAULT_SERVER_DATETIME_FORMAT)
-        end_date = datetime.strptime(self.m_sales_end_date, DEFAULT_SERVER_DATETIME_FORMAT)
+        start_date = datetime.strptime(str(self.m_sales_start_date), DEFAULT_SERVER_DATETIME_FORMAT)
+        end_date = datetime.strptime(str(self.m_sales_end_date), DEFAULT_SERVER_DATETIME_FORMAT)
 
         if start_date and start_date > tommorrow_min_date:
             raise ValidationError(_("Date should not be future date. Kindly check the start date."))

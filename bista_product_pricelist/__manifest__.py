@@ -26,4 +26,3 @@
     "installable": True,
     "post_init_hook": "_update_sales_pricelist",
 }
-
