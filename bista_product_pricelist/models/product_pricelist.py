@@ -1,12 +1,13 @@
 # coding: utf-8
 
 import logging
-
+import itertools
 from odoo import api, fields, models, tools, _
 from odoo.exceptions import UserError, ValidationError
 from datetime import datetime
 
 _logger = logging.getLogger(__name__)
+
 
 class Pricelist(models.Model):
 
@@ -30,7 +31,8 @@ class Pricelist(models.Model):
             uom_id = self._context['uom']
         if uom_id:
             # rebrowse with uom if given
-            products = [item[0].with_context(uom=uom_id) for item in products_qty_partner]
+            products = [item[0].with_context(uom=uom_id)
+                        for item in products_qty_partner]
             products_qty_partner = [(products[index], data_struct[1], data_struct[2]) for index, data_struct in
                                     enumerate(products_qty_partner)]
         else:
@@ -52,10 +54,11 @@ class Pricelist(models.Model):
             prod_tmpl_ids = [tmpl.id for tmpl in products]
             # all variants of all products
             prod_ids = [p.id for p in
-                        list(chain.from_iterable([t.product_variant_ids for t in products]))]
+                        list(itertools.chain.from_iterable([t.product_variant_ids for t in products]))]
         else:
             prod_ids = [product.id for product in products]
-            prod_tmpl_ids = [product.product_tmpl_id.id for product in products]
+            prod_tmpl_ids = [
+                product.product_tmpl_id.id for product in products]
 
         # Load all rules
         self._cr.execute(
@@ -69,7 +72,7 @@ class Pricelist(models.Model):
             'AND (item.pricelist_id = %s) '
             'AND (item.date_start IS NULL OR item.date_start<=%s) '
             'AND (item.date_end IS NULL OR item.date_end>=%s)'
-            'ORDER BY item.applied_on, item.min_quantity desc, categ.parent_left desc, item.date_end asc, item.date_start asc',
+            'ORDER BY item.applied_on, item.min_quantity desc, categ.complete_name desc, item.date_end asc, item.date_start asc',
             (prod_tmpl_ids, prod_ids, categ_ids, self.id, date, date))
 
         item_ids = [x[0] for x in self._cr.fetchall()]
@@ -98,7 +101,7 @@ class Pricelist(models.Model):
             # TDE SURPRISE: product can actually be a template
             price = product.price_compute('list_price')[product.id]
 
-            price_uom = self.env['product.uom'].browse([qty_uom_id])
+            price_uom = self.env['uom.uom'].browse([qty_uom_id])
             for rule in items:
                 if rule.min_quantity and qty_in_product_uom < rule.min_quantity:
                     continue
@@ -126,38 +129,46 @@ class Pricelist(models.Model):
 
                 if rule.base == 'pricelist' and rule.base_pricelist_id:
                     price_tmp = \
-                    rule.base_pricelist_id._compute_price_rule([(product, qty, partner)], date, uom_id)[product.id][
-                        0]  # TDE: 0 = price, 1 = rule
-                    price = rule.base_pricelist_id.currency_id.compute(price_tmp, self.currency_id, round=False)
+                        rule.base_pricelist_id._compute_price_rule([(product, qty, partner)], date, uom_id)[product.id][
+                            0]  # TDE: 0 = price, 1 = rule
+                    price = rule.base_pricelist_id.currency_id.compute(
+                        price_tmp, self.currency_id, round=False)
                 else:
                     # if base option is public price take sale price else cost price of product
                     # price_compute returns the price in the context UoM, i.e. qty_uom_id
                     price = product.price_compute(rule.base)[product.id]
 
-                convert_to_price_uom = (lambda price: product.uom_id._compute_price(price, price_uom))
+                convert_to_price_uom = (
+                    lambda price: product.uom_id._compute_price(price, price_uom))
 
                 if price is not False:
                     if rule.compute_price == 'fixed':
                         price = convert_to_price_uom(rule.fixed_price)
                     elif rule.compute_price == 'percentage':
-                        price = (price - (price * (rule.percent_price / 100))) or 0.0
+                        price = (
+                            price - (price * (rule.percent_price / 100))) or 0.0
                     else:
                         # complete formula
                         price_limit = price
-                        price = (price - (price * (rule.price_discount / 100))) or 0.0
+                        price = (
+                            price - (price * (rule.price_discount / 100))) or 0.0
                         if rule.price_round:
-                            price = tools.float_round(price, precision_rounding=rule.price_round)
+                            price = tools.float_round(
+                                price, precision_rounding=rule.price_round)
 
                         if rule.price_surcharge:
-                            price_surcharge = convert_to_price_uom(rule.price_surcharge)
+                            price_surcharge = convert_to_price_uom(
+                                rule.price_surcharge)
                             price += price_surcharge
 
                         if rule.price_min_margin:
-                            price_min_margin = convert_to_price_uom(rule.price_min_margin)
+                            price_min_margin = convert_to_price_uom(
+                                rule.price_min_margin)
                             price = max(price, price_limit + price_min_margin)
 
                         if rule.price_max_margin:
-                            price_max_margin = convert_to_price_uom(rule.price_max_margin)
+                            price_max_margin = convert_to_price_uom(
+                                rule.price_max_margin)
                             price = min(price, price_limit + price_max_margin)
                     suitable_rule = rule
                 break
@@ -165,9 +176,12 @@ class Pricelist(models.Model):
             if suitable_rule and suitable_rule.compute_price != 'fixed' and suitable_rule.base != 'pricelist':
                 if suitable_rule.base == 'standard_price':
                     # The cost of the product is always in the company currency
-                    price = product.cost_currency_id.compute(price, self.currency_id, round=False)
+                    price = product.cost_currency_id.compute(
+                        price, self.currency_id, round=False)
                 else:
-                    price = product.currency_id.compute(price, self.currency_id, round=False)
+                    price = product.currency_id.compute(
+                        price, self.currency_id, round=False)
 
-            results[product.id] = (price, suitable_rule and suitable_rule.id or False)
+            results[product.id] = (
+                price, suitable_rule and suitable_rule.id or False)
         return results
