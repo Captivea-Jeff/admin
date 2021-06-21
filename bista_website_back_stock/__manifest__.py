@@ -14,6 +14,7 @@
     "depends": [
         "website_sale",
         "product",
+        "maq_custom_theme",
         "bista_website_sortby_new"
     ],
     "data": [
