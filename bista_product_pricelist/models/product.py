@@ -23,5 +23,3 @@ class Product(models.Model):
         self.ensure_one()
         return self.product_tmpl_id._get_combination_info(self.product_template_attribute_value_ids, self.id, add_qty,
                                                           pricelist, parent_combination)
-
-

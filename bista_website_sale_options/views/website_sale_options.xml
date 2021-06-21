@@ -191,6 +191,7 @@
     <!-- Product grid view -->
     <template id="bista_website_sale_products" inherit_id='website_sale.products' name="Products" priority="15">
         <xpath expr="//*[contains(@id, 'products_grid')]//*[1]" position="after">
+        <xpath expr="//*[contains(@id, 'products_grid')]//*[2]" position="after">
             <t t-call="bista_website_sale_options.search"/>
         </xpath>
     </template>
