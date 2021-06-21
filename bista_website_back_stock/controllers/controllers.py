@@ -149,6 +149,7 @@ class WebsiteSale(WebsiteSale):
             'keep': keep,
             'parent_category_ids': parent_category_ids,
             'search_categories_ids': search_categories and search_categories.ids,
+            'url': url,
         }
         if category:
             values['main_object'] = category
