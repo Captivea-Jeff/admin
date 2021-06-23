@@ -60,6 +60,16 @@ class Inventory(models.Model):
         res = super(Inventory, self).default_get(fields)
         return res
 
+    @api.onchange('filter')
+    def _onchange_filter(self):
+        """
+        Ticket 10092: Include exhausted products unchecked by default, when they should be checked
+        """
+        res = super(Inventory, self)._onchange_filter()
+        if self.filter != 'product':
+            self.exhausted = True
+        return res
+
     def action_start(self):
         for inventory in self.filtered(lambda x: x.state not in ('done', 'cancel')):
             vals = {'state': 'confirm', 'date': fields.Datetime.now()}
