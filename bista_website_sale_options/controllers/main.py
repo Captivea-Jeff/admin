@@ -14,8 +14,6 @@ class WebsiteSale(ProductConfiguratorController):
         combination = request.env['product.template.attribute.value'].browse(variant_values)
         has_optional_products = product.optional_product_ids.filtered(lambda p: p._is_add_to_cart_possible(combination))
 
-        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>product_id", product_id)
-
         # if not has_optional_products:
         #     return False
 

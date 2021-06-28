@@ -78,5 +78,4 @@ class WebsiteSale(WebsiteSale):
         if post.get('type') == 'popover':
             # force no-cache so IE11 doesn't cache this XHR
             return request.render("website_sale.cart_popover", values, headers={'Cache-Control': 'no-cache'})
-        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>shipping cart", values)
         return request.render("website_sale.cart", values)

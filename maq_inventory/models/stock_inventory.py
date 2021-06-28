@@ -52,6 +52,13 @@ class Inventory(models.Model):
     approve_date = fields.Date(string='Approved Date', readonly=True)
     line_ids = fields.One2many('stock.inventory.line', 'inventory_id', string='Inventories', copy=True, readonly=False, states={
                                'done': [('readonly', True)], 'approved': [('readonly', True)]})
+    @api.model
+    def default_get(self, fields):
+        ctx = dict(self.env.context)
+        ctx.update({'exhausted': True})
+        # if 'exhausted' in fields:
+        res = super(Inventory, self).default_get(fields)
+        return res
 
     def action_start(self):
         for inventory in self.filtered(lambda x: x.state not in ('done', 'cancel')):

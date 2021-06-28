@@ -53,7 +53,6 @@ class ResUsers(models.Model):
                         if not user.share:
                             user_company_websites = self.env['website'].search([('company_id', 'in', user.company_ids.ids)])
                             auth_allow_website = user.login_website_ids + user_company_websites
-                            print (auth_allow_website)
                             if current_website_id not in user.login_website_ids:
                                 _logger.info('Multi-website login failed for db:%s login:%s website_id:%s', db, login, current_website_id)
                                 user = False

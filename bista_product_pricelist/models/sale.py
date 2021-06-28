@@ -21,6 +21,7 @@ class SaleOrderLine(models.Model):
         field_name = 'lst_price'
         currency_id = None
         product_currency = product.currency_id
+        pricelist_item = ''
         if rule_id:
             pricelist_item = PricelistItem.browse(rule_id)
             if pricelist_item.pricelist_id.discount_policy == 'without_discount':
@@ -34,7 +35,8 @@ class SaleOrderLine(models.Model):
                 product_currency = product.cost_currency_id
             elif pricelist_item.base == 'pricelist' and pricelist_item.base_pricelist_id:
                 field_name = 'price'
-                product = product.with_context(pricelist=pricelist_item.base_pricelist_id.id)
+                product = product.with_context(
+                    pricelist=pricelist_item.base_pricelist_id.id)
                 product_currency = pricelist_item.base_pricelist_id.currency_id
             currency_id = pricelist_item.pricelist_id.currency_id
 
@@ -67,7 +69,8 @@ class SaleOrderLine(models.Model):
             if pricelist_item.base == 'list_price' and pu and pricelist_item.pricelist_id.discount_policy == 'without_discount':
                 result = pu * uom_factor * cur_factor, currency_id
             else:
-                result = product[field_name] * uom_factor * cur_factor, currency_id
+                result = product[field_name] * \
+                    uom_factor * cur_factor, currency_id
         else:
             result = product[field_name] * uom_factor * cur_factor, currency_id
 

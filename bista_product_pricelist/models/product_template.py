@@ -12,8 +12,9 @@ from odoo.tools import float_compare
 
 _logger = logging.getLogger(__name__)
 
+
 class ProductTemplate(models.Model):
-    _inherit='product.template'
+    _inherit = 'product.template'
 
     sales_pricelist = fields.Float(
         'Sales Pricelist', default=1.0,
@@ -46,7 +47,8 @@ class ProductTemplate(models.Model):
         if self.env.context.get('website_id'):
             partner = self.env.user.partner_id
             company_id = current_website.company_id
-            product = self.env['product.product'].browse(combination_info['product_id']) or self
+            product = self.env['product.product'].browse(
+                combination_info['product_id']) or self
 
             tax_display = self.env.user.has_group(
                 'account.group_show_line_subtotals_tax_excluded') and 'total_excluded' or 'total_included'
@@ -72,18 +74,20 @@ class ProductTemplate(models.Model):
                 if company_id.currency_id != pricelist.currency_id:
                     price_without_pricelist = company_id.currency_id.compute(price_without_pricelist,
                                                                              pricelist.currency_id)
-                price_without_pricelist = taxes.compute_all(price_without_pricelist, pricelist.currency_id)[tax_display]
+                price_without_pricelist = taxes.compute_all(
+                    price_without_pricelist, pricelist.currency_id)[tax_display]
                 if sales_pricelist:
                     list_price = \
-                    taxes.compute_all(price_without_pricelist, pricelist.currency_id, quantity_1, product,
-                                      partner)[tax_display]
+                        taxes.compute_all(price_without_pricelist, pricelist.currency_id, quantity_1, product,
+                                          partner)[tax_display]
                 else:
                     list_price = \
                         taxes.compute_all(combination_info['list_price'], pricelist.currency_id, quantity_1, product,
-                                      partner)[tax_display]
+                                          partner)[tax_display]
             else:
                 list_price = price
-            has_discounted_price = pricelist.currency_id.compare_amounts(list_price, price) == 1
+            has_discounted_price = pricelist.currency_id.compare_amounts(
+                list_price, price) == 1
 
             combination_info.update(
                 price=price,
@@ -127,13 +131,13 @@ class ProductTemplate(models.Model):
                     date_end = pricelist_item[2].get('date_end')
                     fixed_price = pricelist_item[2].get('fixed_price')
 
-                    if re.search("virtual_",str(pricelist_item[1])):
+                    if re.search("virtual_", str(pricelist_item[1])):
 
-                        if min_quantity in [0,1] and date_start == False and date_end == False:
+                        if min_quantity in [0, 1] and date_start == False and date_end == False:
                             vals.update({'sales_pricelist': fixed_price})
                     else:
 
-                        if pricelist_item[2].get('fixed_price') or pricelist_item[2].get('min_quantity') in [0,1]:
+                        if pricelist_item[2].get('fixed_price') or pricelist_item[2].get('min_quantity') in [0, 1]:
                             ppi_item = ppi.browse(pricelist_item[1])
                             if date_start is None:
                                 date_start = ppi_item.date_start
@@ -141,7 +145,7 @@ class ProductTemplate(models.Model):
                                 date_end = ppi_item.date_end
                             if min_quantity is None:
                                 min_quantity = ppi_item.min_quantity
-                            if min_quantity in [0,1] and date_start == False and date_end == False:
+                            if min_quantity in [0, 1] and date_start == False and date_end == False:
                                 if fixed_price is None:
                                     fixed_price = ppi_item.fixed_price
                                 vals.update({'sales_pricelist': fixed_price})

@@ -34,4 +34,3 @@ def _update_back_in_stock(cr, registry):
                     _logger.error(
                         'product back in stock date update - ' + product_template.name + ' : %s', e)
                     pass
-            print("product_template>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", product_template)

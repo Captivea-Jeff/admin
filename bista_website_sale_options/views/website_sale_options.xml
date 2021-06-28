@@ -15,6 +15,8 @@
             <link rel="stylesheet" type="text/less"
                   href="/bista_website_sale_options/static/src/less/maq_website.ui.component.less"/>
             <link rel="stylesheet" type="text/less"
+                  href="/bista_website_sale_options/static/src/less/style.less"/>
+            <link rel="stylesheet" type="text/less"
                   href="/bista_website_sale_options/static/src/less/s_big_picture_text.less"/>
         </xpath>
     </template>
@@ -188,7 +190,7 @@
 
     <!-- Product grid view -->
     <template id="bista_website_sale_products" inherit_id='website_sale.products' name="Products" priority="15">
-        <xpath expr="//*[contains(@id, 'products_grid')]//*[2]" position="after">
+        <xpath expr="//*[contains(@id, 'products_grid')]//*[1]" position="after">
             <t t-call="bista_website_sale_options.search"/>
         </xpath>
     </template>
