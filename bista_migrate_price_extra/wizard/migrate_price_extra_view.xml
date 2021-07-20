@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_migrate_price_extra" model="ir.ui.view">
+            <field name="name">migrate.price.extra.form</field>
+            <field name="model">migrate.price.extra</field>
+            <field name="arch" type="xml">
+                <form string="Migrate Price Extra">
+                     <group>
+                         <p>Migrate the Price Extra field from V11 product.attribute.price to V12 product.template.attribute.value.</p>
+                     </group>
+                    <group>
+                        <group>
+                            <field name="company_id"/>
+                            <field name="file" required="0" filename="filename" class="oe_inline"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button string='Migrate Price Extra' name="migrate_price_extra" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+               </form>
+            </field>
+        </record>
+
+        <record id="action_migrate_price_extra" model="ir.actions.act_window">
+            <field name="name">Migrate Price Extra</field>
+            <field name="res_model">migrate.price.extra</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+           <field name="view_id" ref="view_migrate_price_extra"/>
+           <field name="target">new</field>
+        </record>
+
+        <menuitem id="menu_migrate_price_extra" name="Migrate Price Extra" parent="stock.menu_product_in_config_stock" sequence="100" action="action_migrate_price_extra" groups="base.group_system"/>
+
+    </data>
+</odoo>
