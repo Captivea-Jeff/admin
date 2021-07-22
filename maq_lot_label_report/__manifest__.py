@@ -2,7 +2,7 @@
 
 {
     "name": "Bista Maq Lot Label Report",
-    "version": "11.0.1.0.0",
+    "version": "1.0",
     "author": "Bista Solutions Pvt. Ltd.",
     "maintainer": "Bista Solutions Pvt. Ltd.",
     "website": "https://www.bistasolutions.com",
@@ -12,7 +12,8 @@
     'description': """In this module, we have added two report formats in two different objects: - 
             1) Lot Label Report menu in action menu for Lot/Serial number object.
             2) Lot Label Report menu in action menu for Product Variants object""",
-    "depends": ['product', 'stock'],
+    "depends": ['product', 'stock',
+        "maq_base"],
     "data": [
         "views/product_views.xml",
         "wizard/lot_label_view.xml",

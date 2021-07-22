@@ -3,7 +3,7 @@
 
 {
     "name": "Bista Website Sortby New Product",
-    "version": "11.0.1.0.0",
+    "version": "12.0.1.0.0",
     "author": "Bista Solutions Pvt. Ltd.",
     "maintainer": "Bista Solutions Pvt. Ltd.",
     "website": "https://www.bistasolutions.com",
@@ -13,7 +13,8 @@
                 1. Add new feature for sort by new product.""",
     "depends": [
         "website_sale",
-        "product"
+        "product",
+        "maq_base"
     ],
     "data": [
         "views/product_template_views.xml",

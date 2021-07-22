@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
-# Part of BistaSolutions. See LICENSE file for full copyright and licensing details.
+# Part of BistaSolutions.
+# See LICENSE file for full copyright and licensing details.
 {
     'name': 'MAQ Point of Sale Calculator',
-    'version': '11.0.1.0.0',
+    'version': '12.0.1.0.0',
     'summary': 'Point of sale',
     'description': """
     MAQ Point of Sale Calculator code
     """,
     'category': 'POS',
     'website': 'https://www.bistasolutions.com/',
-    'depends': ['point_of_sale', 'maq_point_of_sale'],
+    'depends': ['point_of_sale', 'maq_point_of_sale',
+                "maq_base"],
     'data': [
         'data/data.xml',
         'views/assets.xml',

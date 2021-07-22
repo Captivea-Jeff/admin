@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
-        <template id="bista_products_backinstock" inherit_id="website_sale.products_categories" name="Product Categories">
-            <xpath expr="//div[@id='products_grid_before']/ul/li" position="replace">
-                <li t-att-class=" 'active' if category is None and url == '/shop' else '' ">
-                    <a t-att-href="keep('/shop',category=0)" class="o_not_editable">Newest/All Products</a>
-                </li>
-                <li t-att-class=" 'active' if category is None and url == '/stock' else '' ">
-                    <a href="/stock">Back In Stock </a>
-                </li>
-            </xpath>
-        </template>
-    </data>
-</openerp>
+<odoo>
+    <template id="bista_products_backinstock" inherit_id="maq_custom_theme.option_collapse_products_categories1" name="Product Categories">
+        <xpath expr="//ul[@id='o_shop_collapse_category']/li" position="replace">
+            <li class="nav-item">
+                <a t-att-href="keep('/shop',category=0)" t-attf-class="nav-link#{' active' if category is None and url == '/shop' else ''} o_not_editable">Newest</a>
+            </li>
+            <li class="nav-item">
+                <a href="/stock" t-attf-class="nav-link#{' active' if category is None and url == '/stock' else ''}">Back In Stock</a>
+            </li>
+        </xpath>
+    </template>
+</odoo>

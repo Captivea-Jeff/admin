@@ -13,7 +13,8 @@
     'description': """
     	Following features will be added
     	Req Id. 1.40 - Add custom field in Shipment operation & Delivery slip report""",
-    "depends": ['stock'],
+    "depends": ['stock',
+        "maq_base"],
     "data": [
         "views/stock_picking_inherit_view.xml",
         "views/report_delivery_slip_inherit.xml",

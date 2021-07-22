@@ -14,7 +14,8 @@
     "depends": [
         "website_sale",
         "product",
-        "sale"
+        "sale",
+        "maq_base"
     ],
     "data": [
         "views/product_template_views.xml",
@@ -26,4 +27,3 @@
     "installable": True,
     "post_init_hook": "_update_sales_pricelist",
 }
-

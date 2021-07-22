@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <template id="products_item_maqabim" inherit_id="website_sale.products_item">
+    <!--<template id="products_item_maqabim" inherit_id="website_sale.products_item">
         <xpath expr="//a[@itemprop='name']" position="attributes">
             <attribute name="t-att-content">product.display_name</attribute>
             <attribute name="t-field">product.display_name</attribute>
         </xpath>
-    </template>
-    <template id="product_maqabim" inherit_id="website_sale.product">
+    </template>-->
+    <!--<template id="product_maqabim" inherit_id="website_sale.product">
         <xpath expr="//h1[@itemprop='name']" position="attributes">
             <attribute name="t-field">product.display_name</attribute>
         </xpath>
-        <xpath expr="//div[@id='product_details']/p[last()]" position="replace">
+         <xpath expr="//div[@id='product_details']/p[last()]" position="replace">
         </xpath>
-    </template>
-    <template id="cart_lines_maqabim" inherit_id="website_sale.cart_lines">
-        <xpath expr="//td[@class='td-product_name']" position="replace">
+    </template>-->
+    <!--<template id="cart_lines_maqabim" inherit_id="website_sale.cart_lines">
+        <xpath expr="//td[hasclass('td-product_name')]" position="replace">
             <td t-if="line.product_id.product_tmpl_id" class="td-product_name">
                 <div>
                     <a t-attf-href="/shop/product/#{ slug(line.product_id.product_tmpl_id) }">
@@ -35,9 +35,9 @@
                 </a>
             </td>
         </xpath>
-    </template>
+    </template>-->
     <!-- <template id="payment_maqabim" inherit_id="website_sale.payment">
-        <xpath expr="//td[@class='td-product_name']" position="replace">
+        <xpath expr="//td[hasclass('td-product_name')]" position="replace">
             <td class="td-product_name" t-if="line.product_id.product_tmpl_id">
                 <div>
                     <strong t-field="line.product_id.display_name" />
@@ -53,7 +53,7 @@
             </td>
         </xpath>
     </template> -->
-    <template id="confirmation_maqabim" inherit_id="website_sale.cart_summary">
+    <!--<template id="confirmation_maqabim" inherit_id="website_sale.cart_summary">
         <xpath expr="//td[hasclass('td-product_name')]" position="replace">
             <td class="td-product_name">
                 <div>
@@ -71,13 +71,13 @@
                 </div>
             </td>
         </xpath>
-    </template>
-    <template id="portal_order_page_maqabim" inherit_id="sale.sale_order_portal_content">
+    </template>-->
+    <!--<template id="portal_order_page_maqabim" inherit_id="sale.sale_order_portal_content">
         <xpath expr="//td[@id='product_name']" position="replace">
             <td id="product_name"><span t-field="line.product_id.display_name"/></td>
         </xpath>
-    </template>
-    <template id="cart_popover_maqabim" inherit_id="website_sale.cart_popover">
+    </template>-->
+    <!--<template id="cart_popover_maqabim" inherit_id="website_sale.cart_popover">
         <xpath expr="//div[hasclass('cart_line')]" position="replace">
             <div class="row mb8 cart_line">
                 <div class="col-xs-3">
@@ -92,7 +92,7 @@
                 </div>
             </div>
         </xpath>
-    </template>
+    </template>-->
 
 
     <!-- eCom/Email debranding view based on insalled app -->
