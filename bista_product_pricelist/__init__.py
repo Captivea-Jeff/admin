@@ -8,11 +8,12 @@ from odoo import api, SUPERUSER_ID
 
 _logger = logging.getLogger(__name__)
 
+
 def _update_sales_pricelist(cr, registry):
 
     env = api.Environment(cr, SUPERUSER_ID, {})
 
-    products = env['product.template'].search([('sale_ok','=', True)])
+    products = env['product.template'].search([('sale_ok', '=', True)])
 
     for product in products:
         product_vals = {}
@@ -23,12 +24,10 @@ def _update_sales_pricelist(cr, registry):
         sales_pricelist = False
         if ppis:
             for ppi in ppis:
-                if ppi.min_quantity in [0,1] and ppi.date_start == False and ppi.date_end == False:
+                if ppi.min_quantity in [0, 1] and ppi.date_start == False and ppi.date_end == False:
 
                     sales_pricelist = ppi.fixed_price
-                    print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>',sales_pricelist)
-
-            product_vals.update({'sales_pricelist':sales_pricelist})
+            product_vals.update({'sales_pricelist': sales_pricelist})
 
         if product_vals:
             try:

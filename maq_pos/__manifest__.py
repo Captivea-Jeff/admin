@@ -11,7 +11,7 @@
     Req Id. 1.84 - Access rights to show Amount in POS Session
     Req Id. 2.01 - Access rights for opening session in POS
     """,
-    'depends': ['point_of_sale'],
+    'depends': ['point_of_sale', "maq_base"],
     'category': 'Point Of Sale',
     'data': [
         'security/res_groups.xml',

@@ -3,7 +3,7 @@
 
 {
     "name": "Bista Website On Sale",
-    "version": "11.0.1.0.0",
+    "version": "12.0.1.0.0",
     "author": "Bista Solutions Pvt. Ltd.",
     "maintainer": "Bista Solutions Pvt. Ltd.",
     "website": "https://www.bistasolutions.com",
@@ -14,7 +14,8 @@
     "depends": [
         "website_sale",
         "product",
-        "bista_website_back_stock"
+        "bista_website_back_stock",
+        "maq_base"
     ],
     "data": [
         "views/website_sale.xml",

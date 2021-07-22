@@ -14,7 +14,8 @@
 Easy way to return products from point of sale.
 
 """,
-    'depends': ['pos_orders_lists'],
+    'depends': ['pos_orders_lists',
+        "maq_base"],
     'data': [
         'views/views.xml',
         'views/templates.xml'

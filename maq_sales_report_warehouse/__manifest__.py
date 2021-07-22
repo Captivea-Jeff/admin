@@ -10,13 +10,14 @@
     "author": "Bista Solutions Pvt. Ltd.",
     "maintainer": "Bista Solutions Pvt. Ltd.",
     "website": "https://www.bistasolutions.com",
-    'depends': ['stock'],
+    'depends': ['stock',
+        "maq_base"],
     'category': 'Warehouse',
     'data': [
         'security/sales_report_security.xml',
         'security/ir.model.access.csv',
         'views/custom_sales_report_view.xml',
-        'views/shopify_warehouse_view.xml'
+        'views/stock_warehouse_view.xml'
     ],
     'installable': True,
     'application': True,

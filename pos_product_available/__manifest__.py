@@ -9,7 +9,7 @@
     "category": "Point Of Sale",
     # "live_test_url": "http://apps.it-projects.info/shop/product/DEMO-URL?version={ODOO_BRANCH}",
     "images": [],
-    "version": "11.0.1.1.0",
+    "version": "12.0.1.1.0",
     "application": False,
     "author": "IT-Projects LLC, Ivan Yelizariev",
     "support": "pos@it-projects.info",
@@ -17,7 +17,8 @@
     "license": "Other OSI approved licence",  # MIT
     # "price": 9.00,
     # "currency": "EUR",
-    "depends": ["point_of_sale", "stock"],
+    "depends": ["point_of_sale", "stock",
+        "maq_base"],
     "external_dependencies": {"python": [], "bin": []},
     "data": ["data.xml", "views/views.xml"],
     "qweb": ["static/src/xml/pos.xml"],

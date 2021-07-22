@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- eCom/Email debranding view based on insalled app -->
+    <template id="bista_debrand_layout_footer_copyright" inherit_id="website.layout_footer_copyright" name="Footer Debranding" priority="64">
+        <xpath expr="//div[hasclass('text-right', 'o_not_editable')]" position="replace">
+        </xpath>
+    </template>
+</odoo>

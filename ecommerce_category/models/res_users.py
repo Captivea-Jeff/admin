@@ -18,7 +18,8 @@ class ResUsers(models.Model):
     @api.onchange('company_id', 'company_ids')
     def onchange_company(self):
         user_company_websites = self.env['website'].search([('company_id', 'in', self.company_ids.ids)])
-        self.login_website_ids = user_company_websites + self.registered_on_website_id
+        # self.login_website_ids = user_company_websites + self.registered_on_website_id
+        self.login_website_ids = user_company_websites
 
 
     @classmethod
@@ -52,7 +53,6 @@ class ResUsers(models.Model):
                         if not user.share:
                             user_company_websites = self.env['website'].search([('company_id', 'in', user.company_ids.ids)])
                             auth_allow_website = user.login_website_ids + user_company_websites
-                            print (auth_allow_website)
                             if current_website_id not in user.login_website_ids:
                                 _logger.info('Multi-website login failed for db:%s login:%s website_id:%s', db, login, current_website_id)
                                 user = False
@@ -63,7 +63,7 @@ class ResUsers(models.Model):
                     if user and current_website_id:
                         try:
                             user_id = user.id
-                            user.sudo(user_id).check_credentials(password)
+                            user.sudo(user_id)._check_credentials(password)
                             user.sudo(user_id)._update_last_login()
                         except AccessDenied:
                             _logger.info('Multi-website login failed for db:%s login:%s website_id:%s', db, login, current_website_id)
@@ -76,8 +76,10 @@ class ResUsers(models.Model):
             _logger.info('login failed for db:%s login:%s', db, login)
             user_id = False
 
-        status = "successful" if user_id else "failed"
-        ip = request.httprequest.environ['REMOTE_ADDR'] if request else 'n/a'
-        _logger.info("Login %s for db:%s login:%s from %s", status, db, login, ip)
-
-        return user_id
+        if user_id:
+            status = "successful"
+            ip = request.httprequest.environ['REMOTE_ADDR'] if request else 'n/a'
+            _logger.info("Login %s for db:%s login:%s from %s", status, db, login, ip)
+            return user_id
+        else:
+            raise AccessDenied()

@@ -9,6 +9,14 @@
                 <xpath expr="//form/sheet/group/group[2]/field[@name='payment_term_id']" position="after">
                     <field name='m_customer_ref' invisible="1" attrs="{'readonly': [('state','==','done')]}"/>
                 </xpath>
+                <!-- Ticket 10105: Hide configure a product option -->
+                <xpath expr="//field[@name='order_line']/tree/control" position="replace">
+                    <control>
+                        <create string="Add a product"/>
+                        <create string="Add a section" context="{'default_display_type': 'line_section'}"/>
+                        <create string="Add a note" context="{'default_display_type': 'line_note'}"/>
+                    </control>
+                </xpath>
             </field>
         </record>
         

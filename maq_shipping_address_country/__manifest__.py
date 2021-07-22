@@ -7,7 +7,8 @@
     'description': """
     The module will set the country defined in company address by default for shipping address during checkout process in the website.
     """,
-    'depends': ['website_sale_delivery'],
+    'depends': ['website_sale_delivery',
+        "maq_base"],
     'category': 'eCommerce',
     'data': [],
     'installable': True,

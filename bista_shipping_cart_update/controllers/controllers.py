@@ -4,11 +4,32 @@ import logging
 from odoo import http, tools, _
 from odoo.http import request
 from odoo.addons.website_sale.controllers.main import WebsiteSale
-from datetime import datetime, timedelta
+from datetime import datetime
 
 _logger = logging.getLogger(__name__)
 
+
 class WebsiteSale(WebsiteSale):
+
+
+    @http.route(['/shop/confirm_order'], type='http', auth="public", website=True, sitemap=False)
+    def confirm_order(self, **post):
+        order = request.website.sale_get_order()
+
+        redirection = self.checkout_redirection(order)
+        if redirection:
+            return redirection
+
+        order.onchange_partner_shipping_id()
+        order.order_line._compute_tax_id()
+        request.session['sale_last_order_id'] = order.id
+        request.website.sale_get_order(update_pricelist=True)
+        extra_step = request.website.viewref('website_sale.extra_info_option')
+        if extra_step.active:
+            return request.redirect("/shop/extra_info")
+        # below line added and Commented by Bista on 06th July 2021
+        # return request.redirect("/shop/payment")
+        return request.redirect('/shop/confirmation')
 
     def recalculate_prices(self, order):
         now = datetime.now()
@@ -57,22 +78,13 @@ class WebsiteSale(WebsiteSale):
             elif abandoned_order.id != request.session[
                 'sale_order_id']:  # abandoned cart found, user have to choose what to do
                 values.update({'access_token': abandoned_order.access_token})
-
-        # order_lines = order.order_line
-        #
-        # for line in order_lines:
-        #     if line.exists():
-        #         print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>line.product_id.id",line.product_id.id)
-        #         order._cart_update(product_id=line.product_id.id, line_id=line.id, add_qty=0)
         self.recalculate_prices(order)
-
         if order:
             from_currency = order.company_id.currency_id
             to_currency = order.pricelist_id.currency_id
             compute_currency = lambda price: from_currency.compute(price, to_currency)
         else:
             compute_currency = lambda price: price
-
         values.update({
             'website_sale_order': order,
             'compute_currency': compute_currency,
@@ -83,11 +95,7 @@ class WebsiteSale(WebsiteSale):
             if not request.env.context.get('pricelist'):
                 _order = order.with_context(pricelist=order.pricelist_id.id)
             values['suggested_products'] = _order._cart_accessories()
-
         if post.get('type') == 'popover':
             # force no-cache so IE11 doesn't cache this XHR
             return request.render("website_sale.cart_popover", values, headers={'Cache-Control': 'no-cache'})
-
-        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>shipping cart", values)
-
         return request.render("website_sale.cart", values)

@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'MAQ Point of Sale',
-    'version': '11.0.1.0.0',
+    'version': '12.0.1.0.0',
     'summary': 'Point of sale',
     'description': """
     Point of Sale Custom code
     """,
     'category': 'POS',
     'website': 'https://www.bistasolutions.com/',
-    'depends': ['point_of_sale'],
+    'depends': ['point_of_sale',
+        "maq_base"],
     'data': [
         'views/assets.xml',
         'views/pos_config_view.xml',
