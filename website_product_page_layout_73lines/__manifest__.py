@@ -10,7 +10,8 @@
     'version': '11.0.1.0.0',
     'author': '73Lines',
     'website': 'https://www.73lines.com/',
-    'depends': ['website_sale'],
+    'depends': ['website_sale',
+        "maq_base"],
     'data': [
         'views/templates.xml',
         "data/data.xml"

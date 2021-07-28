@@ -11,7 +11,8 @@
     - Product Category
     - Barcode""",
     'author': 'Bista Solutions India Pvt Ltd.',
-    'depends': ['point_of_sale'],
+    'depends': ['point_of_sale',
+        "maq_base"],
     'data': ['views/assets.xml'],
     'qweb': ['static/src/xml/pos_search.xml'],
     'installable': True,

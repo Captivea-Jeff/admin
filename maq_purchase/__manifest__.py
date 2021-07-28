@@ -10,7 +10,8 @@
     Req Id. 1.89 - Show vendor specific products in PO Line
     Req Id. 1.90 - Add custom field in PO for the Joint PO process
     """,
-    'depends': ['purchase'],
+    'depends': ['purchase',
+        "maq_base"],
     'category': 'Purchase',
     'data': [
         'security/purchase_amount_security.xml',

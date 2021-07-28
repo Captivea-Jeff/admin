@@ -16,6 +16,24 @@
                         name="partner_comment_on_website" class="form-control"/>
                 </div>
             </xpath>
+            <xpath expr="//div[@id='wrap']/div[hasclass('oe_website_sale')]/div[hasclass('row')]/div[1]" position="attributes">
+                <attribute name="class">
+                    col-md-8 col-md-offset-2 oe_cart
+                </attribute>
+            </xpath>
+            <xpath expr="//div[@id='wrap']/div[hasclass('oe_website_sale')]/div[hasclass('row')]/div[2]/div[hasclass('row')]/div[hasclass('col-lg-12')]/a[2]" position="replace">
+                <a role="button" t-if="website_sale_order and website_sale_order.website_order_line" class="btn btn-primary float-right d-none d-xl-inline-block" href="/shop/checkout">
+                    <span class="">Process Checkout</span>
+                    <span class="fa fa-chevron-right" />
+                </a>
+            </xpath>
+            <xpath expr="//div[@id='wrap']/div[hasclass('oe_website_sale')]/div[hasclass('row')]/div[2]" position="attributes">
+                <attribute name="class">
+                    col-md-8 col-md-offset-2 oe_cart
+                </attribute>
+            </xpath>
+            <xpath expr="//div[@id='wrap']/div[hasclass('oe_website_sale')]/div[hasclass('row')]/div[3]" position="replace">
+            </xpath>
         </template>
 
         <template id="confirm_order_in_address" inherit_id="website_sale.checkout" customize_show="True"
@@ -62,12 +80,14 @@
                                     t-esc="int(line.product_uom_qty) == line.product_uom_qty and int(line.product_uom_qty) or line.product_uom_qty" />
                             </td>
                             <td class="text-center td-price">
-                                <span t-field="line.price_reduce_taxexcl" style="white-space: nowrap;"
-                                    t-options="{'widget': 'monetary', 'from_currency': website_sale_order.pricelist_id.currency_id, 'display_currency': website.currency_id}"
-                                    groups="sale.group_show_price_subtotal" />
-                                <span t-field="line.price_reduce_taxinc" style="white-space: nowrap;"
-                                    t-options="{'widget': 'monetary', 'from_currency': website_sale_order.pricelist_id.currency_id, 'display_currency': website.currency_id}"
-                                    groups="sale.group_show_price_total" />
+<!--                                <span t-field="line.price_reduce_taxexcl" style="white-space: nowrap;"-->
+<!--                                    t-options="{'widget': 'monetary', 'from_currency': website_sale_order.pricelist_id.currency_id, 'display_currency': website.currency_id}"-->
+<!--                                    groups="sale.group_show_price_subtotal" />-->
+<!--                                <span t-field="line.price_reduce_taxinc" style="white-space: nowrap;"-->
+<!--                                    t-options="{'widget': 'monetary', 'from_currency': website_sale_order.pricelist_id.currency_id, 'display_currency': website.currency_id}"-->
+<!--                                    groups="sale.group_show_price_total" />-->
+                                <span t-field="line.price_reduce_taxexcl" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'display_currency': website_sale_order.currency_id}" groups="account.group_show_line_subtotals_tax_excluded"/>
+                                <span t-field="line.price_reduce_taxinc" style="white-space: nowrap;" t-options="{'widget': 'monetary', 'display_currency': website_sale_order.currency_id}" groups="account.group_show_line_subtotals_tax_included"/>
                             </td>
                         </tr>
                     </tbody>
@@ -82,6 +102,22 @@
                         readonly="readonly" />
                 </div>
                 <div class="clearfix" />
+            </xpath>
+            <xpath expr="//div[@id='wrap']/div[hasclass('oe_website_sale')]/div[hasclass('row')]/div[1]"
+                position="attributes">
+                <attribute name="class">
+                    col-md-8 col-md-offset-2 oe_cart
+                </attribute>
+            </xpath>
+            <xpath expr="//div[@id='wrap']/div[hasclass('oe_website_sale')]/div[hasclass('row')]/div[3]"
+                position="attributes">
+                <attribute name="class">
+                    col-md-8 col-md-offset-2 oe_cart
+                </attribute>
+            </xpath>
+            <xpath
+                expr="//div[@id='wrap']/div[hasclass('oe_website_sale')]/div[hasclass('row')]/div[hasclass('d-xl-block')]"
+                position="replace">
             </xpath>
         </template>
     </data>

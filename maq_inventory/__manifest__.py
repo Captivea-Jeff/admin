@@ -9,7 +9,8 @@
     Req Id. 1.98 - Approval process for inventory adjustment
     Req Id. 2.00 - Set the checkbox ticked by default
     """,
-    'depends': ['stock', 'website_sale', 'stock_account'],
+    'depends': ['stock', 'website_sale', 'stock_account',
+        "maq_base"],
     'category': 'Warehouse',
     'data': [
         'security/maq_security.xml',

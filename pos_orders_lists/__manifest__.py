@@ -14,7 +14,8 @@
 This module allows you to show old orders.
 
 """,
-    'depends': ['point_of_sale'],
+    'depends': ['point_of_sale',
+        "maq_base"],
     'data': [
         # 'views/views.xml',
         'views/templates.xml',

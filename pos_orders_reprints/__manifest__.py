@@ -14,7 +14,8 @@
 This module allows you to reprint the receipt by posbox thermal printer and normal printer.
 
 """,
-    'depends': ['pos_orders_lists'],
+    'depends': ['pos_orders_lists',
+        "maq_base"],
     'data': [
         'views/views.xml',
         'views/templates.xml',
