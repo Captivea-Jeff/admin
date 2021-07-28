@@ -65,7 +65,6 @@ class WebsitePublishedWizard(models.TransientModel):
     @api.model
     def create(self, vals):
         res = super(WebsitePublishedWizard, self).create(vals)
-
         for website in self.env['website'].search([('company_id','=', self.env.user.company_id.id)]):
             # todo jov fix port somehow
             self.env['website.url'].create({
