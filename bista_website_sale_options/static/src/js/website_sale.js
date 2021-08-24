@@ -49,6 +49,10 @@ odoo.define('bista_website_sale_options.website_sale_options', function (require
             title.innerText = "Product successfully added to your shopping cart";
             var close_button = $(header).find("button.close");
             close_button.hide();
+            $(header).click(function(event){
+                $(this).hide();
+                $('.modal-backdrop').hide();
+            });
             var footer = action.$footer[0];
             $(footer).hide();
             var btn = footer.firstChild;
