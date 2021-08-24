@@ -72,13 +72,15 @@ class WebsiteSale(WebsiteSale):
         Category = request.env['product.public.category']
         search_categories = False
         search_product = Product.search(domain)
-        if search:
-            categories = search_product.mapped('public_categ_ids')
-            search_categories = Category.search(
-                [('id', 'parent_of', categories.ids)] + request.website.website_domain())
-            categs = search_categories.filtered(lambda c: not c.parent_id)
-        else:
-            categs = Category.search([('parent_id', '=', False)] + request.website.website_domain())
+        # if search:
+        #     categories = search_product.mapped('public_categ_ids')
+        #     search_categories = Category.search(
+        #         [('id', 'parent_of', categories.ids)] + request.website.website_domain())
+        #     categs = search_categories.filtered(lambda c: not c.parent_id)
+        # else:
+        #     categs = Category.search([('parent_id', '=', False)] + request.website.website_domain())
+
+        categs = Category.search([('parent_id', '=', False)] + request.website.website_domain())
 
         parent_category_ids = []
         if category:
