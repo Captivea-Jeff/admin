@@ -82,6 +82,20 @@
             </field>
         </record>
 
+
+        <record id="product_product_tree_view_maqcustom" model="ir.ui.view">
+            <field name="name">product.product.tree.maqcustom</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_product_tree_view"/>
+            <field name="arch" type="xml">
+                <!-- Adding a group on COst filed to hide it from users Redmine Bug #11344 -->
+                <xpath expr="//field[@name='standard_price']" position="attributes">
+                    <attribute name="groups">base.group_system</attribute>
+                </xpath>
+            </field>
+        </record>
+
+
         <record id="maq_product_product_shopify_fields_inherit_form" model="ir.ui.view">
             <field name="name">maq.product.product.shopify.fields.inherit.form</field>
             <field name="model">product.product</field>
