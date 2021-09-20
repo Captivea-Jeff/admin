@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <template id="label_report_format1_version1">
-        <div class="col-xs-3" style="padding:0;">
+        <div style="width: 24%; margin: 0; padding:0; display: inline-table;">
             <table style="border-spacing:0;margin-bottom:0.011in;width: 1.75in; height:0.50in;font-size:12px;">
                 <tbody>
                     <tr>
@@ -23,7 +23,7 @@
     </template>
 
     <template id="label_report_format1_version2">
-        <div class="col-xs-3" style="padding:0;">
+        <div style="width: 24%; margin: 0; padding:0; display: inline-table;">
             <table style="border-spacing:0;margin-bottom:0.011in;width: 1.75in; height:0.50in;font-size:13px;">
                 <tbody>
                     <tr>
@@ -42,7 +42,7 @@
     </template>
 
     <template id="label_report_format2_version1">
-        <div class="col-xs-6" style="padding:0;">
+        <div style="width: 49%; margin: 0; padding:0; display: inline-table;">
             <table style="border-spacing:0;margin-bottom:0.281in;width: 4in; height:1.75in;font-size:23px;">
                 <tbody>
                     <tr>
@@ -61,7 +61,7 @@
     </template>
 
     <template id="label_report_format2_version2">
-        <div class="col-xs-6" style="padding:0;">
+        <div style="width: 49%; margin: 0; padding:0; display: inline-table;">
             <table style="border-spacing:0;margin-bottom:0.281in;width: 4in; height:1.75in;font-size:19px;">
                 <tbody>
                     <tr>
