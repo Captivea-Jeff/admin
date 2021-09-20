@@ -152,30 +152,87 @@ class AccountBankStatementLine(models.Model):
                 date_maturity_aft = datetime.strptime(
                     date_maturity_aft, "%Y-%m-%d")
                 date_maturity_after_date_list.append(date_maturity_aft)
+
+            # Below line commented by Bista on 08th Sept 2021
+            # Below search condition takes time to execute and
+            # at the end give reconnection error
+            # for date_before in date_maturity_before_date_list:
+            #     aml_search_date_mat_bef = account_mv_ln.search([('date_maturity', '=', date_before),
+            #                                                     ('payment_id',
+            #                                                      '!=', ''),
+            #                                                     ('statement_line_id',
+            #                                                      '=', False),
+            #                                                     ('id', 'not in',
+            #                                                      excluded_ids),
+            #                                                     ('amount_residual', '=', params.get('amount'))], limit=1)
+            #     if aml_search_date_mat_bef.date_maturity and aml_search_date_mat_bef.payment_id:
+            #         date_maturity_before_list.append(
+            #             aml_search_date_mat_bef.date_maturity)
+            # for date_after in date_maturity_after_date_list:
+            #     aml_search_date_mat_aft = account_mv_ln.search([('date_maturity', '=', date_after),
+            #                                                     ('payment_id',
+            #                                                      '!=', ''),
+            #                                                     ('statement_line_id',
+            #                                                      '=', False),
+            #                                                     ('id', 'not in',
+            #                                                      excluded_ids),
+            #                                                     ('amount_residual', '=', params.get('amount'))], limit=1)
+            #     if aml_search_date_mat_aft.date_maturity and aml_search_date_mat_aft.payment_id:
+            #         date_maturity_after_list.append(
+            #             aml_search_date_mat_aft.date_maturity)
+
+            # Below line added by Bista on 08th Sept 2021
+            # To avoid time execution error
+            # Code Start Here - 08th Sept 2021
             for date_before in date_maturity_before_date_list:
-                aml_search_date_mat_bef = account_mv_ln.search([('date_maturity', '=', date_before),
-                                                                ('payment_id',
-                                                                 '!=', ''),
-                                                                ('statement_line_id',
-                                                                 '=', False),
-                                                                ('id', 'not in',
-                                                                 excluded_ids),
-                                                                ('amount_residual', '=', params.get('amount'))], limit=1)
-                if aml_search_date_mat_bef.date_maturity and aml_search_date_mat_bef.payment_id:
-                    date_maturity_before_list.append(
-                        aml_search_date_mat_bef.date_maturity)
+                if excluded_ids:
+                    self._cr.execute("""SELECT id
+                            FROM account_move_line aml
+                            WHERE date_maturity = %s
+                                AND payment_id is not null
+                                AND statement_line_id is null
+                                AND amount_residual = %s
+                                AND id not in %s
+                            LIMIT 1""",[date_before, params.get('amount'), tuple(excluded_ids)])
+                else:
+                    self._cr.execute("""SELECT id
+                            FROM account_move_line aml
+                            WHERE date_maturity = %s
+                                AND payment_id is not null
+                                AND statement_line_id is null
+                                AND amount_residual = %s
+                            LIMIT 1""",[date_before, params.get('amount')])
+                aml_search_date_mat_bef_result = self._cr.fetchone()
+                if aml_search_date_mat_bef_result:
+                    aml_search_date_mat_bef = account_mv_ln.browse(aml_search_date_mat_bef_result[0])
+                    if aml_search_date_mat_bef.date_maturity and aml_search_date_mat_bef.payment_id:
+                        date_maturity_before_list.append(aml_search_date_mat_bef.date_maturity)
+
             for date_after in date_maturity_after_date_list:
-                aml_search_date_mat_aft = account_mv_ln.search([('date_maturity', '=', date_after),
-                                                                ('payment_id',
-                                                                 '!=', ''),
-                                                                ('statement_line_id',
-                                                                 '=', False),
-                                                                ('id', 'not in',
-                                                                 excluded_ids),
-                                                                ('amount_residual', '=', params.get('amount'))], limit=1)
-                if aml_search_date_mat_aft.date_maturity and aml_search_date_mat_aft.payment_id:
-                    date_maturity_after_list.append(
-                        aml_search_date_mat_aft.date_maturity)
+                if excluded_ids:
+                    self._cr.execute("""SELECT id
+                        FROM account_move_line aml
+                        WHERE date_maturity = %s
+                            AND payment_id is not null
+                            AND statement_line_id is null
+                            AND amount_residual = %s
+                            AND id not in %s
+                        LIMIT 1""",[date_after, params.get('amount'), tuple(excluded_ids)])
+                else:
+                    self._cr.execute("""SELECT id
+                            FROM account_move_line aml
+                            WHERE date_maturity = %s
+                                AND payment_id is not null
+                                AND statement_line_id is null
+                                AND amount_residual = %s
+                            LIMIT 1""",[date_after, params.get('amount')])
+                aml_search_date_mat_aft_result = self._cr.fetchone()
+                if aml_search_date_mat_aft_result:
+                    aml_search_date_mat_aft = account_mv_ln.browse(aml_search_date_mat_aft_result[0])
+                    if aml_search_date_mat_aft.date_maturity and aml_search_date_mat_aft.payment_id:
+                        date_maturity_after_list.append(aml_search_date_mat_aft.date_maturity)
+            # Code End Here - 08th Sept 2021
+
             date_maturity_before_dt_tm_list = [datetime.strptime(
                 date, '%Y-%m-%d') for date in date_maturity_before_list]
             date_maturity_after_dt_tm_list = [datetime.strptime(
