@@ -2,14 +2,14 @@
 <odoo>
     <template id="label_report_format1_version1">
         <div style="width: 24%; margin: 0; padding:0; display: inline-table;">
-            <table style="border-spacing:0;margin-bottom:0.011in;width: 1.75in; height:0.50in;font-size:12px;">
+            <table style="border-spacing:0;margin-bottom:0.003in;width: 1.75in; height:0.4in;font-size:11px;">
                 <tbody>
                     <tr>
                         <td width="70%" style="text-align: center; vertical-align: middle;">
                             <div style="line-height: 90%">
                                 <span t-field="product.default_code"/>
                             </div>
-                            <div style="line-height: 98%;font-size:11px; margin-bottom: 1px;">
+                            <div style="line-height: 98%;font-size:11px; margin-top: 1px;">
                                 <span t-field="product.lst_price" t-options='{"widget": "monetary", "display_currency": product.currency_id}'/>
                             </div>
                             <div>
@@ -24,7 +24,7 @@
 
     <template id="label_report_format1_version2">
         <div style="width: 24%; margin: 0; padding:0; display: inline-table;">
-            <table style="border-spacing:0;margin-bottom:0.011in;width: 1.75in; height:0.50in;font-size:13px;">
+            <table style="border-spacing:0;margin-bottom:0.011in;width: 1.75in; height:0.40in;font-size:13px;">
                 <tbody>
                     <tr>
                         <td width="70%" style="text-align: center; vertical-align: middle;">
@@ -43,7 +43,7 @@
 
     <template id="label_report_format2_version1">
         <div style="width: 49%; margin: 0; padding:0; display: inline-table;">
-            <table style="border-spacing:0;margin-bottom:0.281in;width: 4in; height:1.75in;font-size:23px;">
+            <table style="border-spacing:0;margin-bottom:0.281in;width: 4in; height:1.65in;font-size:23px;">
                 <tbody>
                     <tr>
                         <td width="70%" style="text-align: center; vertical-align: middle;">
@@ -62,7 +62,7 @@
 
     <template id="label_report_format2_version2">
         <div style="width: 49%; margin: 0; padding:0; display: inline-table;">
-            <table style="border-spacing:0;margin-bottom:0.281in;width: 4in; height:1.75in;font-size:19px;">
+            <table style="border-spacing:0;margin-bottom:0.281in;width: 4in; height:1.65in;font-size:19px;">
                 <tbody>
                     <tr>
                         <td width="70%" style="text-align: center; vertical-align: middle;">
