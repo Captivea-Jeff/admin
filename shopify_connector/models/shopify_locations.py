@@ -65,19 +65,26 @@ class StockLocation(models.Model):
     shopify_location_ids = fields.Many2many(
         'shopify.locations', help="Enter Shopify Locations")
 
-    @api.multi
-    def shopify_location_id_select(self):
-        for rec in self:
-            location_count = len(rec.shopify_location_ids)
-            if location_count > 1:
-                return False
-            else:
-                return True
+    # Below Lines are commented on 28-sept-2021
+    """
+    email date:   Sep 18, 2021, 4:09 AM
+    email subject:    Live Launch on Monday
+    """
 
-    _constraints = [
-        (shopify_location_id_select,
-         'You can select only one shopify location!', ['shopify_location_ids']),
-    ]
+    # @api.multi
+    # def check_shopify_location_id_uniq(self):
+    #     for rec in self:
+    #         search_product_count = self.sudo().search_count(
+    #             [('shopify_location_id', '=', rec.shopify_location_id)])
+    #         if search_product_count > 1:
+    #             return False
+    #         else:
+    #             return True
+
+    # _constraints = [
+    #     (check_shopify_location_id_uniq,
+    #      'Shopify location id must be unique!', ['shopify_location_id']),
+    # ]
 
 class StockPicking(models.Model):
 
