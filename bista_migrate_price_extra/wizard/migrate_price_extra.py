@@ -38,11 +38,28 @@ class MigratePriceExtra(models.TransientModel):
         product_attr_obj = self.env['product.attribute.value']
         product_attribute_value_obj = self.env['product.template.attribute.value']
         for row_index in range(1, worksheet.nrows):
+            flag_update_value = False
             price_extra = worksheet.cell_value(row_index, 6)
+            _logger.info("price_extra*********************************%s"%price_extra)
             if price_extra != 0:
-                product_tmpl_id = product_template_obj.search([('name', '=', str(worksheet.cell_value(row_index, 2)))], limit=1)
+                product_tmpl_id = product_template_obj.search([('id', '=', str(worksheet.cell_value(row_index, 1)))], limit=1)
+                _logger.info("product_tmpl_id*********************************%s"%product_tmpl_id)
+                if not product_tmpl_id:
+                    product_tmpl_id = product_template_obj.search([('name', '=', str(worksheet.cell_value(row_index, 2)))], limit=1)
+                    _logger.info("product_tmpl_id by Name*********************************%s"%product_tmpl_id)
                 if product_tmpl_id:
                     product_attr_value_id = product_attr_obj.search([('attribute_id', '=', int(worksheet.cell_value(row_index, 4))), ('name', '=', str(worksheet.cell_value(row_index, 5)).strip())], limit=1)
+                    _logger.info("product_attr_value_id*********************************%s"%product_attr_value_id)
                     if product_attr_value_id:
                         tmpl_extra_price = product_attribute_value_obj.search([('product_tmpl_id', '=', product_tmpl_id.id), ('product_attribute_value_id', '=', product_attr_value_id.id)], limit=1)
-                        tmpl_extra_price.sudo().with_context(company_id=self.company_id.id).write({'price_extra': price_extra})
+                        _logger.info("tmpl_extra_price*********************************%s"%tmpl_extra_price)
+                        if tmpl_extra_price:
+                            flag_update_value = True
+                            tmpl_extra_price.with_context(company_id=self.company_id.id).write({'price_extra': price_extra})
+                    if not flag_update_value:
+                        tmpl_extra_price_rec = product_attribute_value_obj.search([('product_tmpl_id', '=', product_tmpl_id.id)])
+                        _logger.info("tmpl_extra_price_rec###################%s"%tmpl_extra_price_rec)
+                        tmpl_extra_price = tmpl_extra_price_rec.filtered(lambda x: x.product_id and x.product_id.id == str(worksheet.cell_value(row_index, 7)))
+                        _logger.info("tmpl_extra_price###################%s"%tmpl_extra_price)
+                        if tmpl_extra_price:
+                            tmpl_extra_price.with_context(company_id=self.company_id.id).write({'price_extra': price_extra})
