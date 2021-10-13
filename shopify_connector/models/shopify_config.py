@@ -269,13 +269,13 @@ class ShopifyConfig(models.Model):
 
                                 # lst_price = s_product.lst_price if s_product.lst_price > 0 else product.lst_price
 
-                                weight_unit = product.uom_id
+                                weight_unit = product.weight_uom_id
                                 if weight_unit and weight_unit.name in _shopify_allow_weights:
                                     variant_val.update({'weight': product.weight,
                                                         'weight_unit': weight_unit.name})
                                 else:
                                     _logger.error(
-                                        _('UOM is not define for product variant id!: %s') % str(product.id))
+                                        _('Weight is not define for product variant id!: %s') % str(product.id))
 
                                 variant_val.update(
                                     {'price': s_product.lst_price,
@@ -327,10 +327,14 @@ class ShopifyConfig(models.Model):
                     new_product.body_html = ''
                 if options:
                     new_product.options = options
+
                 if variants:
                     product_variants = []
                     for var in variants:
-                        product_variants.append(shopify.Variant(var))
+                        # Below line commented and added to resolve product export issue
+                        # Ticket 11683 - Shopify Connector in V12 --> Major Product Export Bug
+                        # product_variants.append(shopify.Variant(var))
+                        product_variants+=[shopify.Variant(var)]
                     new_product.variants = product_variants
                 if images:
                     new_product.images = images
