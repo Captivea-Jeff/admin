@@ -10,6 +10,22 @@
                 <xpath expr="//field[@name='move_ids_without_package']/tree/field[@name='product_uom']" position='after'>
                     <field name="m_box_number" attrs="{'column_invisible': [('parent.picking_type_code', '!=','outgoing')], 'readonly': [('parent.state','in',('done','cancel'))]}"/>
                 </xpath>
+                <!-- Made stock move line Editable-->
+                <xpath expr="//field[@name='move_ids_without_package']" position='attributes'>
+                    <attribute name="attrs">{'readonly': ['&amp;', '|', ('is_locked', '=', True), ('state', '=', 'done'), '&amp;', ('state', '=', 'done'), ('is_locked', '=', True)]}</attribute>
+                </xpath>
+                <!-- Made Quantity Done field Editable in stock move line-->
+                <xpath expr="//field[@name='move_ids_without_package']/tree/field[@name='quantity_done']" position='attributes'>
+                    <attribute name="attrs">{}</attribute>
+                </xpath>
+                <!-- Added Vendor Code field in stock move line-->
+                <xpath expr="//field[@name='move_ids_without_package']/tree/field[@name='product_id']" position="after">
+                    <field name="m_vendor_code"/>
+                </xpath>
+                <!-- Added Print quantity field in stock move line-->
+                <xpath expr="//field[@name='move_ids_without_package']/tree/field[@name='m_vendor_code']" position="after">
+                    <field name="print_qty"/>
+                </xpath>
             </field>
         </record>
     </data>
