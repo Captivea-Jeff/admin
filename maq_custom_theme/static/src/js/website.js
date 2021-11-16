@@ -66,21 +66,21 @@ require('website_sale.website_sale');
                 $("body.modal-open").removeClass('modal-open')
             }, 3000);
         }
-
-       $.each(data, function(i, val){
-           var quantity = parseFloat(val['quantity']);
-           var product_id = parseInt(val['product_id'], 10);
-           $form.ajaxSubmit({
-               url:  '/shop/cart/update_option',
-               data: {lang: weContext.get().lang, product_id: product_id, add_qty:quantity},
-               success: function (quantity) {
+        console.log(data);
+       // $.each(data, function(i, val){
+       //     var quantity = parseFloat(val['quantity']);
+       //     var product_id = parseInt(val['product_id'], 10);
+        $form.ajaxSubmit({
+            url:  '/shop/cart/variant/update_option',
+            // data: {lang: weContext.get().lang, data},
+            success: function (quantity) {
                    var $q = $(".my_cart_quantity");
                    $q.parent().parent().removeClass("hidden", !quantity);
                    $q.html(quantity).hide().fadeIn(600);
 
                }
            });
-       });
+       // });
 		
 		$form[0].reset();
 

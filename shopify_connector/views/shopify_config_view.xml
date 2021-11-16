@@ -35,6 +35,8 @@
                             <group colspan="4" col="4">
                                 <field name="shop_url" colspan="4"
                                     placeholder="e.g. https://%s:%s@my-shop.myshopify.com/admin" attrs="{'readonly': [('state','=','success')]}"/>
+                                <field name="connection_url" colspan="4"
+                                    placeholder="e.g. https://%s:%s@my-shop.myshopify.com/admin" attrs="{'readonly': [('state','=','success')]}"/>
                                 <field name="api_key" colspan="2" attrs="{'readonly': [('state','=','success')]}"/>
                                 <field name="password" password="1" colspan="2" attrs="{'readonly': [('state','=','success')]}"/>
                             </group>
@@ -75,6 +77,7 @@
                     <field name="name"/>
                     <field name="company_ids"/>
                     <field name="shop_url"/>
+                    <field name="connection_url"/>
                     <field name="api_key"/>
                     <field name="password"/>
                     <filter name="draft" string="Draft" domain="[('state','=','draft')]"/>
