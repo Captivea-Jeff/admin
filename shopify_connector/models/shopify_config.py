@@ -3,6 +3,7 @@
 import shopify
 import logging
 import json
+import requests
 
 from datetime import datetime
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
@@ -36,6 +37,7 @@ class ShopifyConfig(models.Model):
                              default='draft', track_visibility='onchange')
     active = fields.Boolean(
         string='Active', track_visibility='onchange', default="True")
+    connection_url = fields.Char(string='Connection URL', required=True,placeholder='https://99dc47ee0c903ccf31931e5081b5ff8c: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@tjcannabistest.myshopify.com/admin/api/2021-10/products.json',track_visibility='onchange',default='https://99dc47ee0c903ccf31931e5081b5ff8c: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@tjcannabistest.myshopify.com/admin/api/2021-10/')
 
     @api.model
     def create(self, vals):
@@ -205,7 +207,8 @@ class ShopifyConfig(models.Model):
             10.3 Update shopify_product_id, shopify_inventory_item_id and shopify_product_template_id in shopify_product_product master
             10.4 Update an inventory for product for all locations
         """
-        self.test_connection()
+        # self.test_connection()
+        product_url = self.connection_url+"products.json"
 
         product_tmpl_obj = self.env['product.template']
         shopify_prod_obj = self.env['shopify.product.product']
@@ -310,35 +313,72 @@ class ShopifyConfig(models.Model):
                     str_prod_province_tags.append(prov_tag.name)
                 tags = ",".join(str_prod_province_tags)
 
+                vals = {}
+                vals["title"] = product_tmpl_id.name
+                vals["published"] = s_product_tmpl_id.shopify_published
+                if s_product_tmpl_id.product_type:
+                    vals["product_type"] = s_product_tmpl_id.product_type.name
+                if s_product_tmpl_id.vendor:
+                    vals["vendor"]  = s_product_tmpl_id.vendor.name
+                if tags:
+                    vals["tags"] =  tags
+                if s_product_tmpl_id.body_html:
+                    vals["body_html"] =  str(s_product_tmpl_id.body_html)
+                else:
+                    vals["body_html"] = ''
+                if options:
+                    vals["options"] = options
+                if variants:
+                    vals["variants"] = variants
+                if images:
+                    vals["images"] = images
+
+                payload = json.dumps({ "product":vals})
+                headers = {'Content-Type': 'application/json'}
+                response = requests.request("POST", product_url, headers=headers, data=payload)
+                response_json = response.json()
+                product_data = response_json['product']
+                product_id = str(product_data['id'])
+                product_image_url = self.connection_url+"products/"+product_id+"/images.json"
+                if product_tmpl_id.image:
+                    payload = json.dumps({"image":{'attachment': product_tmpl_id.image.decode("utf-8"),
+                                'position': 1}})
+                    response = requests.request("POST", product_image_url, headers=headers, data=payload)
+
+                for product_image in product_tmpl_id.product_image_ids:
+                    if product_image.image:
+                        payload = json.dumps({"image": {'attachment': product_image.image.decode("utf-8")}})
+                        response = requests.request("POST", product_image_url, headers=headers, data=payload)
+
 
                 # Create Product Template on Shopify using the above details
-                new_product = shopify.Product()
-                new_product.title = product_tmpl_id.name
-                new_product.published = s_product_tmpl_id.shopify_published
-                if s_product_tmpl_id.product_type:
-                    new_product.product_type = s_product_tmpl_id.product_type.name  # "Snowboard"
-                if s_product_tmpl_id.vendor:
-                    new_product.vendor = s_product_tmpl_id.vendor.name  # "Burton"
-                if tags:
-                    new_product.tags = tags  # "Barnes & Noble, John's Fav, \"Big Air\""
-                if s_product_tmpl_id.body_html:
-                    new_product.body_html = str(s_product_tmpl_id.body_html)
-                else:
-                    new_product.body_html = ''
-                if options:
-                    new_product.options = options
+#                 new_product = shopify.Product()
+#                 new_product.title = product_tmpl_id.name
+#                 new_product.published = s_product_tmpl_id.shopify_published
+#                 if s_product_tmpl_id.product_type:
+#                     new_product.product_type = s_product_tmpl_id.product_type.name  # "Snowboard"
+#                 if s_product_tmpl_id.vendor:
+#                     new_product.vendor = s_product_tmpl_id.vendor.name  # "Burton"
+#                 if tags:
+#                     new_product.tags = tags  # "Barnes & Noble, John's Fav, \"Big Air\""
+#                 if s_product_tmpl_id.body_html:
+#                     new_product.body_html = str(s_product_tmpl_id.body_html)
+#                 else:
+#                     new_product.body_html = ''
+#                 if options:
+#                     new_product.options = options
 
-                if variants:
-                    product_variants = []
-                    for var in variants:
-                        # Below line commented and added to resolve product export issue
-                        # Ticket 11683 - Shopify Connector in V12 --> Major Product Export Bug
-                        # product_variants.append(shopify.Variant(var))
-                        product_variants+=[shopify.Variant(var)]
-                    new_product.variants = product_variants
-                if images:
-                    new_product.images = images
-                success = new_product.save()  # returns false if the record is invalid
+#                 if variants:
+#                     product_variants = []
+#                     for var in variants:
+#                         # Below line commented and added to resolve product export issue
+#                         # Ticket 11683 - Shopify Connector in V12 --> Major Product Export Bug
+#                         # product_variants.append(shopify.Variant(var))
+#                         product_variants+=[shopify.Variant(var)]
+#                     new_product.variants = product_variants
+#                 if images:
+#                     new_product.images = images
+#                 success = new_product.save()  # returns false if the record is invalid
 
                 # If a product is created successfully, then update
                 # shopify_template_id in shopify_product_template master and
@@ -347,7 +387,9 @@ class ShopifyConfig(models.Model):
                 # Shopify in future we can use this field to make product
                 # publish and unpublish on Shopify) else update an error
                 # message in the shopify_error_log field.
-                if success:
+                self.test_connection()
+                new_product = shopify.Product.find(product_id)
+                if new_product:
                     # Now update variants details in Odoo system as well as variant inventory and icon images on Shopify
                     # s_product_tmpl_id.update({'shopify_published': True})
                     if s_product_tmpl_id.meta_fields_ids:
