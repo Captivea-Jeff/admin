@@ -37,7 +37,7 @@ class ShopifyConfig(models.Model):
                              default='draft', track_visibility='onchange')
     active = fields.Boolean(
         string='Active', track_visibility='onchange', default="True")
-    connection_url = fields.Char(string='Connection URL', required=True,placeholder='https://99dc47ee0c903ccf31931e5081b5ff8c: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@tjcannabistest.myshopify.com/admin/api/2021-10/products.json',track_visibility='onchange',default='https://99dc47ee0c903ccf31931e5081b5ff8c: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@tjcannabistest.myshopify.com/admin/api/2021-10/')
+    connection_url = fields.Char(string='Connection URL', required=True, track_visibility='onchange')
 
     @api.model
     def create(self, vals):
