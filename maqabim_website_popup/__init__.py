@@ -9,7 +9,7 @@ _logger = logging.getLogger(__name__)
 
 def _update_website_menus(cr):
     env = api.Environment(cr, SUPERUSER_ID, {})
-    res = env['ir.module.module'].search_read([('name', '=', 'maqabim_website_sale')], ['latest_version'], limit=1)
+    res = env['ir.module.module'].search_read([('name', '=', 'maqabim_website_popup')], ['latest_version'], limit=1)
     if res and res[0]['latest_version'] and res[0]['latest_version'].startswith('11.0'):
         # execute only for the database in v12.0
         # TODO: still require control to execute it one time only
