@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
-from odoo.addons.base.maintenance.migrations import util
+# from odoo.addons.base.maintenance.migrations import util
 
 
 def migrate(cr, version):
@@ -12,4 +12,4 @@ def migrate(cr, version):
     print("Moving registered_on_website_id to website_id on the res.partner...")
     cr.execute("UPDATE res_partner SET website_id = res_users.registered_on_website_id FROM res_users WHERE res_partner.user_id = res_users.id;")
     cr.execute("UPDATE res_users SET website_id = registered_on_website_id;")
-    util.remove_module(cr, "website_multi")
+    # util.remove_module(cr, "website_multi")
