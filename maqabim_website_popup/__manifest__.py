@@ -6,7 +6,7 @@
     'sequence': 100,
     'license': 'OEEL-1',
     'website': 'https://www.odoo.com',
-    'version': '1.0',
+    'version': '1.1',
     'author': 'Odoo Inc',
     'description': """
 Maqabim Website Popup
@@ -24,4 +24,5 @@ Maqabim Website Popup
     'installable': True,
     'application': False,
     'auto_install': False,
+    'pre_init_hook': '_update_website_menus'
 }
