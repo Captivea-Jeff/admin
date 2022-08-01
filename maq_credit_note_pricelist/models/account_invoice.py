@@ -19,7 +19,7 @@ class AccountInvoice(models.Model):
             self.m_pricelist_id = self.partner_id.property_product_pricelist
         return result
 
-    @api.multi
+    # @api.multi
     def button_update_prices_from_pricelist(self):
         for inv in self.filtered(lambda r: r.state == 'draft'):
             inv.invoice_line_ids.filtered('product_id').update_from_pricelist()
@@ -58,7 +58,7 @@ class AccountInvoiceLine(models.Model):
         self.price_unit = self.env['account.tax']._fix_tax_included_price(
             product.price, product.taxes_id, self.invoice_line_tax_ids)
 
-    @api.multi
+    # @api.multi
     def update_from_pricelist(self):
         """overwrite current prices from pricelist"""
         for line in self.filtered(lambda r: r.invoice_id.state == 'draft'):
