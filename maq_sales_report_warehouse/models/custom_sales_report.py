@@ -47,7 +47,7 @@ class SalesReport(models.Model):
                 vals.update({'company_ids':[[6, 0, list(set(company_ids))]]})
         return super(SalesReport, self).create(vals)
 
-    @api.multi
+    #@api.multi
     def write(self, vals):
         if vals.get('m_warehouse_id'):
             warehouse_id = vals.get('m_warehouse_id')
@@ -62,7 +62,7 @@ class SalesReport(models.Model):
                 vals.update({'company_ids':[[6, 0, list(set(company_ids))]]})
         return super(SalesReport, self).write(vals)
 
-    @api.multi
+    #@api.multi
     def _check_date(self):
         tommorrow_date = datetime.now() + timedelta(days=1)
         tommorrow_min_date = datetime.combine(tommorrow_date, time.min)
@@ -82,7 +82,7 @@ class SalesReport(models.Model):
     def _onchange_date(self):
         self._check_date()
 
-    @api.multi
+    #@api.multi
     def lock_record(self):
         """
         Clear all fields related filters
@@ -90,7 +90,7 @@ class SalesReport(models.Model):
         self.update({'is_lock':True,
         'event_description':'Lock the record'})
 
-    @api.multi
+    #@api.multi
     def unlock_record(self):
         """
         Clear all fields related filters
@@ -98,7 +98,7 @@ class SalesReport(models.Model):
         self.update({'is_lock':False,
         'event_description':'Unock the record'})
 
-    @api.multi
+    #@api.multi
     def add_filter(self):
         """
         Show the lines based on filters
@@ -182,7 +182,7 @@ class SalesReport(models.Model):
         self.update({'event_description':'Clicked on add filter'})
 
 
-    @api.multi
+    #@api.multi
     def clear_filter(self):
         """
         Clear all fields related filters
@@ -195,7 +195,7 @@ class SalesReport(models.Model):
         self.update({'event_description':'Clicked on clear filter'})
 
 
-    @api.multi
+    #@api.multi
     def clear_data(self):
         """
         Clear all the lines as well as fields related filters
@@ -211,7 +211,7 @@ class SalesReport(models.Model):
             #     raise ValidationError(_("The Lines are already cleared"))
         self.update({'event_description':'Clicked on clear data'})
 
-    # @api.multi
+    # #@api.multi
     # def _get_company_ids(self):
     #     company_ids = []
     #     sw = self.env['stock.warehouse']
@@ -528,7 +528,7 @@ class SalesReport(models.Model):
         _logger.info("After filter number of prod_ids***********%s"%len(prod_ids))
         return list(set(prod_ids))
     
-    @api.multi
+    #@api.multi
     def generate_report(self):
         """
         Generates report lines
@@ -715,7 +715,7 @@ class SalesReport(models.Model):
                 results = self.env.cr.execute(query)
         _logger.info("End generate report function")
 
-#     @api.multi
+#     #@api.multi
 #     def generate_report(self):
 #         """
 #         Generates report lines
@@ -1032,7 +1032,7 @@ class SalesReportLines(models.Model):
     #             forecasted_qty = result['quantity']
     #     return forecasted_qty
 
-#     @api.multi
+#     #@api.multi
 #     @api.depends("product_id", "m_sales_start_date", "m_sales_end_date")
 #     def _get_delivered_qty(self):
 #         """
@@ -1063,7 +1063,7 @@ class SalesReportLines(models.Model):
 #             else:
 #                 rec.delivered_qty = 0
 
-#     @api.multi
+#     #@api.multi
 #     @api.depends("product_id", "qty_on_hand", "m_sales_start_date", "m_sales_end_date")
 #     def _compute_forecasted_qty(self):
 #         """
@@ -1151,7 +1151,7 @@ class SalesReportLines(models.Model):
 #                 rec.forecasted_qty = 0
 
 
-    # @api.multi
+    # #@api.multi
     # @api.depends("delivered_qty","qty_on_hand","forecasted_qty")
     # def _compute_total(self):
     #     """

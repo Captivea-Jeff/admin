@@ -7,7 +7,7 @@ from odoo.tools import float_is_zero
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
-    @api.multi
+    #@api.multi
     def action_invoice_create(self, grouped=False, final=False):
         """
         Add undelivered so lines in invoice lines 

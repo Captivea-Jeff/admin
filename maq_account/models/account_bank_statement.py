@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 class AccountBankStatement(models.Model):
     _inherit = 'account.bank.statement'
 
-    @api.multi
+    #@api.multi
     def reconciliation_widget_preprocess(self):
         """ Get statement lines of the specified statements or all unreconciled statement lines and try to automatically reconcile them / find them a partner.
             Return ids of statement lines left to reconcile and other data for the reconciliation widget.

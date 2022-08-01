@@ -7,7 +7,7 @@ class SaleOrderLine(models.Model):
 
     _inherit = "sale.order.line"
 
-    @api.multi
+    #@api.multi
     @api.depends('product_id', 'order_id.company_id')
     def _get_cost_price(self):
         '''

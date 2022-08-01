@@ -10,13 +10,13 @@ class AccountInvoiceLine(models.Model):
     back_order_qty = fields.Float(string="Backorder Qty", compute="_compute_backorder_qty",
                                 digits=dp.get_precision('Product Unit of Measure'))
 
-    @api.multi
+    #@api.multi
     @api.depends('sale_line_ids')
     def _compute_ordered_qty(self):
         for invoice_line in self.filtered(lambda l: l.sale_line_ids):
             invoice_line.ordered_qty = sum([l.product_uom_qty for l in invoice_line.sale_line_ids])
 
-    @api.multi
+    #@api.multi
     @api.depends('ordered_qty','quantity')
     def _compute_backorder_qty(self):
         """

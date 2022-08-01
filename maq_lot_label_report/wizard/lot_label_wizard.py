@@ -30,7 +30,7 @@ class LotLabelWizard(models.TransientModel):
     product_lot_label_ids = fields.One2many(
         'product.print.lot.label', 'wizard_id', string='Products')
 
-    @api.multi
+    #@api.multi
     def print_lot_report(self):
         self.ensure_one()
         data = {'ids': self.env.context.get('active_ids', [])}

@@ -19,7 +19,7 @@ class ShopifyProductTemplate(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin', 'portal.mixin']
     _rec_name = 'product_tmpl_id'
 
-    @api.multi
+    #@api.multi
     @api.onchange('shopify_config_id')
     def onchange_shopify_config(self):
         '''
@@ -76,7 +76,7 @@ class ShopifyProductTemplate(models.Model):
                 _("You cannot create multiple records for same shopify configuration"))
         return res
 
-    @api.multi
+    #@api.multi
     def write(self, vals):
         '''
         Prevent the user to update a shopify product template record with the same shopify config.
@@ -94,7 +94,7 @@ class ShopifyProductTemplate(models.Model):
                     _("You cannot create multiple records for same shopify configuration"))
         return res
 
-    @api.multi
+    #@api.multi
     def export_shopify(self):
         '''
         This method is called by export button and it checks if product or province tags are set and then,
@@ -109,7 +109,7 @@ class ShopifyProductTemplate(models.Model):
                     raise ValidationError(
                         _("Please select atleast 1 product or province tags before exporting product to shopify!"))
 
-    @api.multi
+    #@api.multi
     def update_shopify_product(self):
         '''
         Process shopify product template updation from odoo to shopify

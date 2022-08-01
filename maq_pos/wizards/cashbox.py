@@ -52,7 +52,7 @@ class CustomCashBoxIn(models.Model):
     put_money_in = fields.Float(
         string='Total', store=True, readonly=True, compute='_cal_total')
 
-    @api.multi
+    #@api.multi
     def run(self):
         for record in self:
             active_model = record.env.context.get('active_model', False)
@@ -124,7 +124,7 @@ class CustomCashBoxOut(models.Model):
     put_money_out = fields.Float(
         string='Total', store=True, readonly=True, compute='_cal_total')
 
-    @api.multi
+    #@api.multi
     def run(self):
         for record in self:
             active_model = record.env.context.get('active_model', False)

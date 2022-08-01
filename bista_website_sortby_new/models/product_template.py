@@ -15,7 +15,7 @@ class ProductTemplate(models.Model):
 
     publish_date = fields.Datetime('Publish Date', company_dependent=True)
 
-    @api.multi
+    #@api.multi
     def write(self, vals):
         for rec in self:
             val_sale_ok = vals.get('sale_ok')

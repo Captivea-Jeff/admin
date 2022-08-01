@@ -31,7 +31,7 @@ class LabelReportWizard(models.TransientModel):
         ('product', 'Product')])
     product_label_ids = fields.One2many('product.print.label', 'wizard_id', string='Products')
 
-    @api.multi
+    #@api.multi
     def print_report(self):
         self.ensure_one()
         data = {'ids': self.env.context.get('active_ids', [])}

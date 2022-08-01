@@ -7,7 +7,7 @@ from odoo import models, fields, api, _
 class ShopifyProductExport(models.TransientModel):
     _name = 'export.shopify.product'
 
-    @api.multi
+    #@api.multi
     def export_shopify_product_template(self):
         shopify_prod_obj = self.env['shopify.product.template']
         for rec in self:

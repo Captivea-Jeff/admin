@@ -43,7 +43,7 @@ class ProductProduct(models.Model):
 #                                                 string="Hide Product from Websites")
 
 
-#     @api.multi
+#     #@api.multi
 #     def is_product_variant_publish(self):
 #         for rec in self:
 #             if rec.website_published:
@@ -60,7 +60,7 @@ class ProductProduct(models.Model):
 #             else:
 #                 return False
 
-    @api.multi
+    #@api.multi
     def is_product_variant_publish(self):
         for rec in self:
             if rec.website_published:
@@ -81,7 +81,7 @@ class ProductProduct(models.Model):
             else:
                 return False
 
-    @api.multi
+    #@api.multi
     def is_product_variant_hide(self):
         for rec in self:
             if rec.website_published:

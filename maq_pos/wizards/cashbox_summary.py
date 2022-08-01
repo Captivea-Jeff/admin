@@ -40,7 +40,7 @@ class POSSession(models.Model):
     m_cashbox_summary_ids = fields.One2many(
         'account.cashbox.summary', 'pos_session_id', string='Cashbox Lines')
 
-    @api.multi
+    #@api.multi
     def open_cashbox(self):
         vals = super(POSSession, self).open_cashbox()
         if vals.get('context'):
@@ -51,7 +51,7 @@ class POSSession(models.Model):
 class AccountBankStmtCashWizard(models.Model):
     _inherit = 'account.bank.statement.cashbox'
 
-    @api.multi
+    #@api.multi
     def validate(self):
         bnk_stmt_id = self.env.context.get(
             'bank_statement_id', False) or self.env.context.get('active_id', False)

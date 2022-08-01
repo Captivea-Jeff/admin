@@ -7,7 +7,7 @@ from odoo import models, fields, api, _
 class ShopifyProductUpdate(models.TransientModel):
     _name = 'update.shopify.product'
 
-    @api.multi
+    #@api.multi
     def update_shopify_product_template(self):
         shopify_prod_obj = self.env['shopify.product.template']
         for rec in self:

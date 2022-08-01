@@ -12,7 +12,7 @@ class PosOrder(models.Model):
     ordered_cannabis = fields.Float(string='Ordered Cannabis', compute="_compute_ordered_cannabis",
                                     digits=dp.get_precision('Weight Precision Three'))
 
-    @api.multi
+    #@api.multi
     @api.depends('lines')
     def _compute_ordered_cannabis(self):
         for rec in self:

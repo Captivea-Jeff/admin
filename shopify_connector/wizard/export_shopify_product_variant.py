@@ -7,7 +7,7 @@ from odoo import models, fields, api, _
 class ShopifyVariantExport(models.TransientModel):
     _name = 'export.shopify.variant'
 
-    @api.multi
+    #@api.multi
     def export_shopify_product_variant(self):
         shopify_prod_obj = self.env['shopify.product.product']
         for rec in self:

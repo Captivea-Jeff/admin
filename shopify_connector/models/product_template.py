@@ -18,7 +18,7 @@ class ProductTemplate(models.Model):
     published_on_shopify = fields.Boolean(
         "Published on Shopify", help="Published on Shopify", track_visibility='onchange')
 
-    @api.multi
+    #@api.multi
     def _check_default_code_uniq_template(self):
         '''
         Prevent the default code duplication when creating product template
@@ -36,7 +36,7 @@ class ProductTemplate(models.Model):
          'Default Code must be unique per Product!', ['default_code']),
     ]
 
-    @api.multi
+    #@api.multi
     def write(self, vals):
         """
         Restrict a user from making can_be_sold and can_be_purchased false if a

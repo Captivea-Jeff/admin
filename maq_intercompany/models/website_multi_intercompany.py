@@ -23,7 +23,7 @@ class WebsitePublishedWizard(models.TransientModel):
 class WebsitePublishedMixin(models.AbstractModel):
     _inherit = 'website.published.mixin'
 
-    @api.multi
+    #@api.multi
     def _compute_website_published(self):
         for record in self:
             current_website_id = self._context.get('website_id')

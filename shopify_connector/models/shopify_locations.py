@@ -43,7 +43,7 @@ class ShopifyLocations(models.Model):
     active = fields.Boolean("Active", help="Enter Active",
                             track_visibility='onchange', default=True)
 
-    @api.multi
+    #@api.multi
     def check_shopify_location_id_uniq(self):
         for rec in self:
             search_product_count = self.sudo().search_count(
@@ -71,7 +71,7 @@ class StockLocation(models.Model):
     email subject:    Live Launch on Monday
     """
 
-    # @api.multi
+    # #@api.multi
     # def check_shopify_location_id_uniq(self):
     #     for rec in self:
     #         search_product_count = self.sudo().search_count(

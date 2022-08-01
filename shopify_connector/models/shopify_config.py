@@ -54,7 +54,7 @@ class ShopifyConfig(models.Model):
                 _("You cannot select more than two companies !"))
         return res
 
-    @api.multi
+    #@api.multi
     def write(self, vals):
         '''
         Check on record updation time if the default company is set in companies and
@@ -71,14 +71,14 @@ class ShopifyConfig(models.Model):
                 _("You cannot select more than two companies !"))
         return res
 
-    @api.multi
+    #@api.multi
     def reset_to_draft(self):
         '''This method will set the shopify config to draft state'''
         for rec in self:
             rec.state = 'draft'
         return True
 
-    @api.multi
+    #@api.multi
     def test_connection(self):
         """
         This function check that shopify store is exist or not using api_key, password and shop_url
@@ -107,7 +107,7 @@ class ShopifyConfig(models.Model):
 #                     _('UnauthorizedAccess: Invalid API key or access token.'))
         return True
 
-    @api.multi
+    #@api.multi
     def check_connection(self):
         """
         This function check that shopify store is exist or not using api_key, password and shop_url
@@ -137,7 +137,7 @@ class ShopifyConfig(models.Model):
                     _('UnauthorizedAccess: Invalid API key or access token.'))
         return True
 
-    @api.multi
+    #@api.multi
     def export_products_to_shopify(self):
         """
         Fetch a product template ids which need to be updated on shopify
@@ -164,7 +164,7 @@ class ShopifyConfig(models.Model):
 #         product_tmpl_ids = [44038]
 #         return self.export_product(product_tmpl_ids)
 
-    @api.multi
+    #@api.multi
     def export_new_shopify_variants(self):
         '''
         Export newly created variant of a product to shopify
@@ -183,7 +183,7 @@ class ShopifyConfig(models.Model):
         else:
             raise ValidationError(_('No New shopify product variants available to export !'))
 
-    @api.multi
+    #@api.multi
     def export_product(self, s_product_tmpl_ids, shopify_locations_records=False):
         """
         Process Product template and pass it to the shopify
@@ -531,7 +531,7 @@ class ShopifyConfig(models.Model):
             else:
                 raise ValidationError(_("A Product should be 'Can be Sold' and 'Can be Purchased' before export"))
 
-    @api.multi
+    #@api.multi
     def update_shopify_inventory(self, shopify_location_id, inventory_item_id, qty):
         """
         Adjust qty on shopify base on given location_id and inventory_item_id
@@ -544,7 +544,7 @@ class ShopifyConfig(models.Model):
             _logger.error(
                 _('Facing a problems while update a product quantity!: %s') % e)
 
-    @api.multi
+    #@api.multi
     def test_import_orders(self):
         """
         Fetch order ids from shopify with give condition and pass it to import_order function
@@ -670,7 +670,7 @@ class ShopifyConfig(models.Model):
         return order_company        
         
     
-    @api.multi
+    #@api.multi
     def import_order(self, shopify_order_id, order_company, allow_import=False):
         """
         Import provided Sale order id from shopify to odoo

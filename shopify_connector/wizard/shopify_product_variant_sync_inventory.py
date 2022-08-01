@@ -8,7 +8,7 @@ from odoo import models, fields, api, _
 class ShopifyVariantInventorySync(models.TransientModel):
     _name = 'shopify.variant.inventory.sync'
 
-    @api.multi
+    #@api.multi
     def shopify_product_variant_inventory_sync(self):
         shopify_prod_obj = self.env['shopify.product.product']
         stock_quant_obj = self.env['stock.quant']

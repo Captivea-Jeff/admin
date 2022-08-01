@@ -39,7 +39,7 @@ class PosConfig(models.Model):
                 child_categ_ids_list = [item for sublist in child_categs for item in sublist]
                 config.iface_available_child_categ_ids = [(6, 0, child_categ_ids_list)]
 
-    @api.multi
+    #@api.multi
     def open_session_cb(self):
         """ new session button
 

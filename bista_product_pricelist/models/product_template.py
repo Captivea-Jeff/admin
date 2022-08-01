@@ -19,7 +19,7 @@ class ProductTemplate(models.Model):
         digits=dp.get_precision('Product Price'), company_dependent=True,
         help="Base price to compute the customer price. Sometimes called the catalog price.")
 
-    @api.multi
+    #@api.multi
     def write(self, vals):
         ppi = self.env['product.pricelist.item']
         pricelist_items = vals.get('item_ids')
@@ -78,7 +78,7 @@ class ProductTemplate(models.Model):
 
         return result
 
-    # @api.multi
+    # #@api.multi
     # def _compute_sales_pricelist(self):
     #     ppis = self.item_ids
     #     sales_pricelist = False

@@ -21,7 +21,7 @@ class ShopifyMetafields(models.Model):
     namespace = fields.Char(
         "Namespace", required=True, help="Enter Value Type", track_visibility="onchange")
 
-    @api.multi
+    #@api.multi
     def name_get(self):
         result = []
         for rec in self:
@@ -38,7 +38,7 @@ class ShopifyMetafields(models.Model):
                 raise ValidationError(_("Please enter integer value for integer type"))
         return res
 
-    @api.multi
+    #@api.multi
     def write(self, vals):
         res = super(ShopifyMetafields, self).write(vals)
         for rec in self:

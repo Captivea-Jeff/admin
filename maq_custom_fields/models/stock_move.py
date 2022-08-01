@@ -7,7 +7,7 @@ class StockMove(models.Model):
 
     _inherit = 'stock.move'
     
-    @api.multi
+    #@api.multi
     @api.depends('picking_id.partner_id', 'picking_id.company_id', 'product_id')
     def _get_vendor_code(self):
         '''

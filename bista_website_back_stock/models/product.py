@@ -10,7 +10,7 @@ _logger = logging.getLogger(__name__)
 class Product(models.Model):
     _inherit='product.product'
 
-    @api.multi
+    #@api.multi
     def write(self, vals):
         for rec in self:
             sale_ok = vals.get('sale_ok')

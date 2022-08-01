@@ -9,7 +9,7 @@ from odoo.exceptions import UserError
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
-    @api.multi
+    #@api.multi
     def _action_launch_procurement_rule(self):
         """
         Launch procurement group run method with required/custom fields genrated by a

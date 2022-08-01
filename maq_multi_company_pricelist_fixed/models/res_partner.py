@@ -8,7 +8,7 @@ from odoo.http import request
 class Partner(models.Model):
     _inherit = 'res.partner'
 
-    @api.multi
+    #@api.multi
     @api.depends('country_id')
     def _compute_product_pricelist(self):
         # NOT A REAL PROPERTY !!!!

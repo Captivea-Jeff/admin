@@ -14,7 +14,7 @@ class StockPicking(models.Model):
     shipped_equivalent = fields.Float(string="Shipped Equivalent", compute="_compute_ordered_shipped_equivalent",
                                       digits=dp.get_precision('Weight Precision Three'))
 
-    @api.multi
+    #@api.multi
     @api.depends('move_lines')
     def _compute_ordered_shipped_equivalent(self):
         for rec in self:

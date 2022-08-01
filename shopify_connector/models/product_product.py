@@ -18,7 +18,7 @@ class ProductProduct(models.Model):
     # shopify_uom = fields.Many2one(
     #     "product.uom", "Shopify UOM", help="Enter Shopify UOM", domain=[('is_shopify_uom','=',True)], track_visibility="onchange")
 
-    @api.multi
+    #@api.multi
     def _check_default_code_uniq_product(self):
         '''
         Prevent the default code duplication when creating product variant
@@ -54,7 +54,7 @@ class ProductProduct(models.Model):
                 raise ValidationError(_("Discount Product Already Exists in the system !"))
         return res
 
-    @api.multi
+    #@api.multi
     def write(self, vals):
         """
         Restrict a user from creating multiple shipping products and multiple discount products for Shopify.

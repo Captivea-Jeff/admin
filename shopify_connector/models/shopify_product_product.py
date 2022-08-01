@@ -54,7 +54,7 @@ class ShopifyProductProduct(models.Model):
     # check_multi_click = fields.Boolean("Multi Click", help="Check Multi Click?", track_visibility='onchange', readonly=True)
     last_updated_date = fields.Datetime(string='Last Updated Date', readonly=True)
 
-    @api.multi
+    #@api.multi
     def export_shopify_variant(self):
         '''
         This method gets called by export variant button and
@@ -64,7 +64,7 @@ class ShopifyProductProduct(models.Model):
             shopify_config_rec = rec.shopify_config_id
             shopify_config_rec.export_prod_variant(rec)
 
-    @api.multi
+    #@api.multi
     def update_shopify_variant(self):
         '''
         Process shopify product variant updation from odoo to shopify
@@ -190,7 +190,7 @@ class ShopifyProductProduct(models.Model):
                 _("You cannot create multiple records for same shopify configuration"))
         return res
 
-    @api.multi
+    #@api.multi
     def write(self, vals):
         '''
         Prevent the user to update a shopify product product record with the same shopify config.
@@ -208,7 +208,7 @@ class ShopifyProductProduct(models.Model):
                     _("You cannot create multiple records for same shopify configuration"))
         return res
 
-#     @api.multi
+#     #@api.multi
 #     def unlink(self):
 #         for rec in self:
 #             if rec.shopify_product_id:

@@ -53,7 +53,7 @@ class SaleOrder(models.Model):
             res['arch'] = etree.tostring(doc, encoding='unicode')
         return res
 
-    @api.multi
+    #@api.multi
     def action_invoice_create(self, grouped=False, final=False):
         '''
         Inherit this method to improve the discount price according to invoiced quantities to set exact discount amount

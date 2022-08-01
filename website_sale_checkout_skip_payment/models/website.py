@@ -9,7 +9,7 @@ class Website(models.Model):
     checkout_skip_payment = fields.Boolean(
         compute='_compute_checkout_skip_payment')
 
-    @api.multi
+    #@api.multi
     def _compute_checkout_skip_payment(self):
         for rec in self:
             if request.session.uid:
