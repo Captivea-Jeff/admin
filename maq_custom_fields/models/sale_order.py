@@ -4,10 +4,11 @@ from odoo import models, fields, api
 
 
 class SaleOrderLine(models.Model):
-
     _inherit = "sale.order.line"
 
-    @api.multi
+    m_cost_price = fields.Float(string="Cost", compute="_get_cost_price", readonly=True, 
+                          help="Cost used for stock valuation in standard price and as a first price to set in average/fifo. Also used as a base price for pricelists. Expressed in the default unit of measure of the product.", tracking=True)
+
     @api.depends('product_id', 'order_id.company_id')
     def _get_cost_price(self):
         '''
@@ -22,6 +23,3 @@ class SaleOrderLine(models.Model):
                 if product_company_search:
                     cost_price = product_company_search.value_float or 0
             rec.m_cost_price = cost_price
-
-    m_cost_price = fields.Float(string="Cost", compute="_get_cost_price", readonly=True, 
-                          help="Cost used for stock valuation in standard price and as a first price to set in average/fifo. Also used as a base price for pricelists. Expressed in the default unit of measure of the product.", track_visibility="onchange")

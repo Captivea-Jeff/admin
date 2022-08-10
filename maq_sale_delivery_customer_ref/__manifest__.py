@@ -2,7 +2,7 @@
 
 {
     'name': 'MAQ Customer Reference Sale Delivery',
-    'version': '1.0',
+    'version': '15.0.0.1',
     'summary': 'Add ',
     'description': """
     Following feature will be added
