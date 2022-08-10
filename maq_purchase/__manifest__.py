@@ -2,7 +2,7 @@
 
 {
     'name': 'Maq Purchase Amount Grouping',
-    'version': '1.0',
+    'version': '15.0.1.0.0',
     'summary': 'The module applies group on unit price total price and subtotal fields ',
     'description': """
     Following features will be added
