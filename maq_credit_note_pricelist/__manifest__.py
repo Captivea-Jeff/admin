@@ -2,7 +2,7 @@
 
 {
     "name": "Bista Maq Credit Note Pricelist",
-    "version": "11.0.1.0.0",
+    "version": "15.0.1.0.0",
     "author": "Bista Solutions Pvt. Ltd.",
     "maintainer": "Bista Solutions Pvt. Ltd.",
     "website": "https://www.bistasolutions.com",
@@ -10,7 +10,7 @@
     "license": "AGPL-3",
     'description': """In Customer Credit Note, consider Pricelist in order to calculate correct unit price in Customer invoice line""",
     'summary': '',
-    "depends": ['account', ],
+    "depends": ['account'],
     "data": [
         "views/account_invoice_view.xml"
     ],

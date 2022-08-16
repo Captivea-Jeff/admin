@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
+
 import logging
 
-from odoo import http, tools, _
+from odoo import fields, http, _
 from odoo.http import request
 from odoo.addons.website_sale.controllers.main import WebsiteSale
-from datetime import datetime, timedelta
+from datetime import datetime
 
 _logger = logging.getLogger(__name__)
 
-class WebsiteSale(WebsiteSale):
+class WebsiteSaleExt(WebsiteSale):
 
     def recalculate_prices(self, order):
         now = datetime.now()
@@ -17,6 +18,7 @@ class WebsiteSale(WebsiteSale):
             if 'product_tmpl_id' in line._fields:
                 dict['product_tmpl_id'] = line.product_tmpl_id
             line2 = request.env['sale.order.line'].new(dict)
+
             # we make this to isolate changed values:
             line2.sudo().product_uom_change()
             line2.sudo()._onchange_discount()
@@ -58,27 +60,15 @@ class WebsiteSale(WebsiteSale):
                 'sale_order_id']:  # abandoned cart found, user have to choose what to do
                 values.update({'access_token': abandoned_order.access_token})
 
-        # order_lines = order.order_line
-        #
-        # for line in order_lines:
-        #     if line.exists():
-        #         print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>line.product_id.id",line.product_id.id)
-        #         order._cart_update(product_id=line.product_id.id, line_id=line.id, add_qty=0)
+        values.update({
+            'website_sale_order': order,
+            'date': fields.Date.today(),
+            'suggested_products': [],
+        })
         self.recalculate_prices(order)
 
         if order:
-            from_currency = order.company_id.currency_id
-            to_currency = order.pricelist_id.currency_id
-            compute_currency = lambda price: from_currency.compute(price, to_currency)
-        else:
-            compute_currency = lambda price: price
-
-        values.update({
-            'website_sale_order': order,
-            'compute_currency': compute_currency,
-            'suggested_products': [],
-        })
-        if order:
+            order.order_line.filtered(lambda l: not l.product_id.active).unlink()
             _order = order
             if not request.env.context.get('pricelist'):
                 _order = order.with_context(pricelist=order.pricelist_id.id)
@@ -87,7 +77,5 @@ class WebsiteSale(WebsiteSale):
         if post.get('type') == 'popover':
             # force no-cache so IE11 doesn't cache this XHR
             return request.render("website_sale.cart_popover", values, headers={'Cache-Control': 'no-cache'})
-
-        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>shipping cart", values)
 
         return request.render("website_sale.cart", values)

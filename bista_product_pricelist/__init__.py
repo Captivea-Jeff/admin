@@ -18,7 +18,7 @@ def _update_sales_pricelist(cr, registry):
         product_vals = {}
         product_name = str(product.name) or ''
 
-        ppis = product.item_ids
+        ppis = env['product.pricelist.item'].search([('product_tmpl_id','=',product.id)])
 
         sales_pricelist = False
         if ppis:
@@ -26,9 +26,9 @@ def _update_sales_pricelist(cr, registry):
                 if ppi.min_quantity in [0,1] and ppi.date_start == False and ppi.date_end == False:
 
                     sales_pricelist = ppi.fixed_price
-                    print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>',sales_pricelist)
 
             product_vals.update({'sales_pricelist':sales_pricelist})
+            print ("product_vals --->>", product_vals)
 
         if product_vals:
             try:

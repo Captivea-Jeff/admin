@@ -3,7 +3,7 @@
 
 {
     "name": "Bista Product Price",
-    "version": "11.0.1.0.0",
+    "version": "1.0",
     "author": "Bista Solutions Pvt. Ltd.",
     "maintainer": "Bista Solutions Pvt. Ltd.",
     "website": "https://www.bistasolutions.com",
@@ -19,10 +19,6 @@
     "data": [
         "views/product_template_views.xml",
     ],
-    #    "qweb": [
-    #        "static/src/xml/website_sale.xml",
-    #    ],
-    # "images": ["static/description/groupexpand.png"],
     "installable": True,
     "post_init_hook": "_update_sales_pricelist",
 }

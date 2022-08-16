@@ -14,7 +14,7 @@ This module will, block website shop page for non-portal users
     'website': "https://www.odoo.com",
     'category': 'eCommerce',
     'version': '1',
-    'depends': ['website_sale'],
+    'depends': ['website_sale', 'auth_signup'],
     'data': [
         'views/templates.xml'
     ],
