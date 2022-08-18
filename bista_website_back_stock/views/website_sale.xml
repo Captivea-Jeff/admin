@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
         <template id="bista_products_backinstock" inherit_id="website_sale.products_categories" name="Product Categories">
-            <xpath expr="//div[@id='products_grid_before']/ul/li" position="replace">
-                <li t-att-class=" 'active' if category is None and url == '/shop' else '' ">
-                    <a t-att-href="keep('/shop',category=0)" class="o_not_editable">Newest/All Products</a>
-                </li>
-                <li t-att-class=" 'active' if category is None and url == '/stock' else '' ">
-                    <a href="/stock">Back In Stock </a>
+            <xpath expr="//div[@id='wsale_products_categories_collapse']//form//li" position="replace">
+                <li class="nav-item">
+                    <div t-att-data-link-href="keep('/shop', category=0)" class="custom-control custom-radio mb-1 d-inline-block">
+                        <input type="radio" style="pointer-events:none;" class="custom-control-input o_not_editable" t-att-id="all_products" t-att-value="all_products" t-att-checked="'true' if not category and not url else None"/>
+                        <label class="custom-control-label font-weight-normal" t-att-for="all_products">Newest/All Products</label>
+                    </div>
+                    <div t-att-data-link-href="keep('/stock', category=0)" class="custom-control custom-radio mb-1 d-inline-block">
+                        <input type="radio" style="pointer-events:none;" class="custom-control-input" t-att-id="back_product" t-att-value="back_product" t-att-checked="'true' if not category and url == '/stock' else None"/>
+                        <label class="custom-control-label font-weight-normal" t-att-for="back_product">Back In Stock</label>
+                    </div>
                 </li>
             </xpath>
         </template>
     </data>
-</openerp>
+</odoo>

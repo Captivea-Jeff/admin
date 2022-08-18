@@ -20,10 +20,6 @@
         "views/website_sale.xml",
         "views/product_template_views.xml",
     ],
-    #    "qweb": [
-    #        "static/src/xml/website_sale.xml",
-    #    ],
-    # "images": ["static/description/groupexpand.png"],
     "installable": True,
     "post_init_hook": "_update_back_in_stock",
 }
