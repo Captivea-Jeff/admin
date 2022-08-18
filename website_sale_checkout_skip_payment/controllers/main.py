@@ -9,7 +9,7 @@ class CheckoutSkipPayment(WebsiteSale):
         # When skip payment step, the transaction not exists so only render
         # the waiting message in ajax json call
         if not request.website.checkout_skip_payment:
-            return super(CheckoutSkipPayment, self).payment_get_status(sale_order_id, **post)
+            return super(CheckoutSkipPayment, self).shop_payment_get_status(sale_order_id, **post)
         return {
             "recall": True,
             "message": request.website._render(
@@ -20,7 +20,7 @@ class CheckoutSkipPayment(WebsiteSale):
     @http.route()
     def shop_payment_confirmation(self, **post):
         if not request.website.checkout_skip_payment:
-            return super(CheckoutSkipPayment, self).payment_confirmation(**post)
+            return super(CheckoutSkipPayment, self).shop_payment_confirmation(**post)
         order = (
             request.env["sale.order"]
             .sudo()
