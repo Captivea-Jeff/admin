@@ -7,7 +7,7 @@
     'summary': 'Product Page Layout',
     'description': 'Product Page Layout',
     'category': 'Website',
-    'version': '11.0.1.0.0',
+    'version': '15.0.1.0.0',
     'author': '73Lines',
     'website': 'https://www.73lines.com/',
     'depends': ['website_sale'],
