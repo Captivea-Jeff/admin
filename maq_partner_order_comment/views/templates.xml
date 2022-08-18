@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <template id="partner_comment_assets_frontend" inherit_id="website.assets_frontend">
-            <xpath expr="." position="inside">
-                <script type="text/javascript" src="/maq_partner_order_comment/static/src/js/website_partner_order_comment.js"></script>
-            </xpath>
-        </template>
+<!--        <template id="partner_comment_assets_frontend" inherit_id="website.assets_frontend">-->
+<!--            <xpath expr="." position="inside">-->
+<!--                <script type="text/javascript" src="/maq_partner_order_comment/static/src/js/website_partner_order_comment.js"></script>-->
+<!--            </xpath>-->
+<!--        </template>-->
         <template id="partner_order_comment" inherit_id="website_sale.cart"
             customize_show="True" name="Customer Order Comment">
             <xpath expr="//div[hasclass('clearfix')]" position="before">
@@ -39,7 +39,7 @@
                             <td class='' colspan="2" t-if="not line.product_id.product_tmpl_id"></td>
                             <td class='td-img' t-if="line.product_id.product_tmpl_id">
                                 <a t-attf-href="/shop/product/#{ slug(line.product_id.product_tmpl_id) }">
-                                    <span t-field="line.product_id.image_small"
+                                    <span t-field="line.product_id.image_128"
                                         t-options="{'widget': 'image', 'class': 'img-rounded'}" />
                                 </a>
                             </td>

@@ -1,4 +1,4 @@
-odoo.define('maq_partner_order_comment.cart', function(require) {
+odoo.define('maq_partner_order_comment.custom_cart', function(require) {
     "use strict";
 
     var ajax = require('web.ajax');
