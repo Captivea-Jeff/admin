@@ -16,5 +16,4 @@ class StockMove(models.Model):
     def create(self, vals):
         if vals.get('product_uom_qty'):
             vals['print_qty'] = int(vals['product_uom_qty'])
-        res = super(StockMove, self).create(vals)
-        return res
+        return super(StockMove, self).create(vals)

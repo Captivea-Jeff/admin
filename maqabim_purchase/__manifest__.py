@@ -70,6 +70,7 @@ This module will added new report on PO for priting product label
     'version': '0.1',
     'depends': ['purchase', 'sale_stock'],
     'data': [
+        'security/ir.model.access.csv',
         'wizard/label_report_views.xml',
 
         'reports/label_report_template.xml',

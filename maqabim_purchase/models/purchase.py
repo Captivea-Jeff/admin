@@ -16,5 +16,4 @@ class PurchaseOrderLine(models.Model):
     def create(self, vals):
         if vals.get('product_qty') and 'print_qty' not in vals:
             vals['print_qty'] = int(vals['product_qty'])
-        res = super(PurchaseOrderLine, self).create(vals)
-        return res
+        return super(PurchaseOrderLine, self).create(vals)
