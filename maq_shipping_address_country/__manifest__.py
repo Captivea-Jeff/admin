@@ -10,6 +10,7 @@
     'depends': ['website_sale_delivery'],
     'category': 'eCommerce',
     'data': [],
+    'license': 'LGPL-3',
     'installable': True,
     'application': True,
     'auto_install': False,
