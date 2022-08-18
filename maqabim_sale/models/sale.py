@@ -7,27 +7,22 @@ from odoo.tools import float_is_zero
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
-    @api.multi
-    def action_invoice_create(self, grouped=False, final=False):
+    def _create_invoices(self, grouped=False, final=False):
         """
         Add undelivered so lines in invoice lines 
         """
         zero_qty_lines = []
-        invoice_lines = self.env['account.invoice.line']
-        precision = self.env['decimal.precision'].precision_get(
-            'Product Unit of Measure')
+        precision = self.env['decimal.precision'].precision_get('Product Unit of Measure')
         for order in self:
-            group_key = order.id if grouped else (
-                order.partner_invoice_id.id, order.currency_id.id)
             for line in order.order_line.sorted(key=lambda l: l.qty_to_invoice < 0):
                 if float_is_zero(line.qty_to_invoice, precision_digits=precision):
-                    vals = line._prepare_invoice_line(qty=0)
+                    vals = line._prepare_invoice_line(quantity=0)
                     vals.update({'sale_line_ids': [(6, 0, [line.id])]})
                     zero_qty_lines += [vals]
-        invoice_id = super(
-            SaleOrder, self).action_invoice_create(grouped, final)
-        if invoice_id:
+        move = super(SaleOrder, self)._create_invoices(grouped, final)
+        if move:
             for vals in zero_qty_lines:
-                vals.update({'invoice_id': invoice_id[0]})
-                self.env['account.invoice.line'].create(vals)
-        return invoice_id
+                vals.update({'move_id': move.id,
+                             'account_id': move.journal_id.default_account_id.id})
+                self.env['account.move.line'].create(vals)
+        return move

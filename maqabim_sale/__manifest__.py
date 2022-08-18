@@ -12,11 +12,11 @@ Maqabim Distributors: Invoice customizations
     'website': "https://www.odoo.com",
     'category': 'Custom Development',
     'version': '0.1',
-    'depends': ['sale_management'],
+    'depends': ['account','sale_management'],
     'data': [
         'views/account_invoice_views.xml',
         'views/report_invoice.xml',
-        'views/portal_templates.xml'
+        # 'views/portal_templates.xml' Note: it's works in v15 no need this view
     ],
     'license': 'OEEL-1',
 }
