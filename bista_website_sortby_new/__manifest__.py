@@ -19,12 +19,8 @@
         "views/product_template_views.xml",
         "views/templates.xml"
     ],
-    #    "qweb": [
-    #        "static/src/xml/website_sale.xml",
-    #    ],
-    # "images": ["static/description/groupexpand.png"],
+    "license": "LGPL-3",
     "installable": True,
     "application": True,
     "post_init_hook": "_update_publish_date",
 }
-
