@@ -13,11 +13,15 @@ Maqabim Distributors: SO PDF custo + Sticky header for website
     "author": "Odoo Inc",
     'website': "https://www.odoo.com",
     'category': 'Custom Development',
-    'version': '0.1',
-    'depends': ['sale_management', 'website'],
+    'version': '15.0.0.1',
+    'depends': ['sale_management', 'website','portal'],
     'data': [
         'views/report_sale.xml',
-        'views/templates.xml'
     ],
+'assets': {
+        'web.assets_frontend': [
+            'maqabim_customization/static/src/css/website.css',
+        ],
+    },
     'license': 'OEEL-1',
 }
