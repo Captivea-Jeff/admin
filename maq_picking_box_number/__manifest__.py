@@ -2,7 +2,7 @@
 
 {
     "name": "Bista Maq Picking Box Number",
-    "version": "1.0",
+    "version": "15.0.0.1",
     "author": "Bista Solutions Pvt. Ltd.",
     "maintainer": "Bista Solutions Pvt. Ltd.",
     "website": "https://www.bistasolutions.com",
