@@ -38,13 +38,13 @@
             <field name="name">User specific warehouses</field>
             <field name="model_id" ref="stock.model_stock_warehouse"/>
             <field name="global" eval="True"/>
-            <field name="domain_force">[('id', 'in', user.warehouse_ids.ids)]</field>
+            <!-- <field name="domain_force">[('id', 'in', user.warehouse_ids.ids)]</field> -->
         </record>
         <record id="stock_picking_type_user_rule" model="ir.rule">
             <field name="name">User specific picking operations</field>
             <field name="model_id" ref="stock.model_stock_picking_type"/>
             <field name="global" eval="True"/>
-            <field name="domain_force">[('warehouse_id', 'in', user.warehouse_ids.ids)]</field>
+            <!-- <field name="domain_force">[('warehouse_id', 'in', user.warehouse_ids.ids)]</field> -->
         </record>
         <record id="stock_picking_user_rule" model="ir.rule">
             <field name="name">User specific pickings</field>
