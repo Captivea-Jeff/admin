@@ -53,7 +53,7 @@
         <!-- Intercompany rule for product.style object -->
         <record id="product_style_intercompany_rule" model="ir.rule">
             <field name="name">Product Style Intercompany Rule</field>
-            <field ref="website_sale.model_product_style" name="model_id"/>
+            <field ref="website_sale.model_product_ribbon" name="model_id"/>
             <field eval="1" name="global"/>
             <field name="domain_force">['|',
             ('company_id.id', '=', user.company_id.id),

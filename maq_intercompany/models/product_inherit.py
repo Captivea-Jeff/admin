@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api
-from odoo.addons import decimal_precision as dp
 from odoo.tools.translate import html_translate
 from odoo.exceptions import ValidationError
 
 class ProductProduct(models.Model):
-
     _inherit = 'product.product'
 
     def action_view_stock_move_lines(self):
@@ -22,22 +20,22 @@ class ProductProduct(models.Model):
         return res
 
 class ProductAttributePrice(models.Model):
-    _inherit = "product.attribute.price"
+    _inherit = "product.template.attribute.value"
 
-    @api.depends('product_tmpl_id','value_id')
+    @api.depends('product_tmpl_id','product_attribute_value_id')
     def _get_product_variant(self):
         for rec in self:
             product_tmpl_id = rec.product_tmpl_id
-            value_id = rec.value_id
-            if product_tmpl_id and value_id:
-                product_variants = self.env['product.product'].sudo().search([('product_tmpl_id','=',product_tmpl_id.id),('attribute_value_ids','=',value_id.id)], limit=1)
+            product_attribute_value_id = rec.product_attribute_value_id
+            if product_tmpl_id and product_attribute_value_id:
+                product_variants = self.env['product.product'].sudo().search([('product_tmpl_id','=',product_tmpl_id.id),('product_template_attribute_value_ids','=',product_attribute_value_id.id)], limit=1)
                 if product_variants:
                     rec.product_id = product_variants.id
                 else:
                     rec.product_id = False
             else:
                 rec.product_id = False
-    price_extra = fields.Float('Price Extra', company_dependent=True, digits=dp.get_precision('Product Price'))
+    price_extra = fields.Float('Price Extra', company_dependent=True, digits='Product Price')
     product_id = fields.Many2one('product.product', 'Product', compute='_get_product_variant')
 
 class ProductTemplateWebsiteDescription(models.Model):
@@ -47,8 +45,6 @@ class ProductTemplateWebsiteDescription(models.Model):
     product_tmpl_id = fields.Many2one('product.template', string="Product Template", required=True)
     company_id = fields.Many2one('res.company', string="Company", required=True)
     website_description = fields.Html('Description for the website', required=True, translate=html_translate)
-
-
 
     _sql_constraints = [
         ('product_company_uniq',
@@ -103,8 +99,7 @@ class ProductTemplate(models.Model):
     sale_ok = fields.Boolean(
         'Can be Sold', default=True, company_dependent=True,
         help="Specify if the product can be selected in a sales order line.")
-    purchase_ok = fields.Boolean('Can be Purchased',
-                                company_dependent=True, default=True)
+    purchase_ok = fields.Boolean('Can be Purchased', company_dependent=True, default=True)
     available_in_pos = fields.Boolean(string='Available in Point of Sale', company_dependent=True,
         help='Check if you want this product to appear in the Point of Sale', default=True)
     purchase_method = fields.Selection([
@@ -115,33 +110,31 @@ class ProductTemplate(models.Model):
         "On received quantities: control bills based on received quantity.", default="receive")
     list_price = fields.Float(
         'Sales Price', default=1.0,
-        digits=dp.get_precision('Product Price'),
-        company_dependent=True,
-        help="Base price to compute the customer price. Sometimes called the catalog price.")
+        digits='Product Price', company_dependent=True,
+        help="Price at which the product is sold to customers.",
+    )
     produce_delay = fields.Float(
         'Manufacturing Lead Time', default=0.0, company_dependent=True,
-        help="Average delay in days to produce this product. In the case of multi-level BOM, the manufacturing lead times of the components will be added.")
+        help="Average lead time in days to manufacture this product. In the case of multi-level BOM, the manufacturing lead times of the components will be added.")
     sale_delay = fields.Float(
         'Customer Lead Time', default=0, company_dependent=True,
-        help="The average delay in days between the confirmation of the customer order and the delivery of the finished products. It's the time you promise to your customers.")
-    invoice_policy = fields.Selection(
-        [('order', 'Ordered quantities'),
-         ('delivery', 'Delivered quantities'),
-        ], string='Invoicing Policy', company_dependent=True,
-        help='Ordered Quantity: Invoice based on the quantity the customer ordered.\n'
-             'Delivered Quantity: Invoiced based on the quantity the vendor delivered (time or deliveries).',
+        help="Delivery lead time, in days. It's the number of days, promised to the customer, between the confirmation of the sales order and the delivery.")
+    invoice_policy = fields.Selection([
+        ('order', 'Ordered quantities'),
+        ('delivery', 'Delivered quantities')], string='Invoicing Policy', company_dependent=True,
+        help='Ordered Quantity: Invoice quantities ordered by the customer.\n'
+             'Delivered Quantity: Invoice quantities delivered to the customer.',
         default='order')
-    inventory_availability = fields.Selection([
-        ('never', 'Sell regardless of inventory'),
-        ('always', 'Show inventory on website and prevent sales if not enough stock'),
-        ('threshold', 'Show inventory below a threshold and prevent sales if not enough stock'),
-        ('custom', 'Show product-specific notifications'),
-    ], string='Inventory Availability', company_dependent=True, help='Adds an inventory availability status on the web product page.', default='never')
+    # Field is remove in V15
+    # inventory_availability = fields.Selection([
+    #     ('never', 'Sell regardless of inventory'),
+    #     ('always', 'Show inventory on website and prevent sales if not enough stock'),
+    #     ('threshold', 'Show inventory below a threshold and prevent sales if not enough stock'),
+    #     ('custom', 'Show product-specific notifications'),
+    # ], string='Inventory Availability', company_dependent=True, help='Adds an inventory availability status on the web product page.', default='never')
     available_threshold = fields.Float(string='Availability Threshold', company_dependent=True, default=5.0)
-    custom_message = fields.Text(string='Custom Message', company_dependent=True, default='')
-    description = fields.Text(
-        'Description', translate=True, company_dependent=True,
-        help="A precise description of the Product, used only for internal information purposes.")
+    out_of_stock_message = fields.Html(string="Out-of-Stock Message", company_dependent=True, translate=html_translate)
+    description = fields.Html('Description', translate=True, company_dependent=True)
     description_purchase = fields.Text(
         'Purchase Description', translate=True, company_dependent=True,
         help="A description of the Product that you want to communicate to your vendors. "
@@ -155,7 +148,6 @@ class ProductTemplate(models.Model):
     description_pickingin = fields.Text('Description on Receptions', company_dependent=True, translate=True)
     website_description = fields.Html('Description for the website', compute="_get_website_description", inverse='_set_website_description', translate=html_translate)
     website_description_ids = fields.One2many('product.template.website.description', 'product_tmpl_id', string="Website Description")
-
 
     def action_view_routes(self):
         '''This method inherits the default odoo method and updates the domain
@@ -173,6 +165,7 @@ class ProductTemplate(models.Model):
 
 
 class ProductStyle(models.Model):
-    _inherit = "product.style"
+    # product.style is product.ribbon in v15
+    _inherit = "product.ribbon"
 
     company_id = fields.Many2one('res.company', string="Company")

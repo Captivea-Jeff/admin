@@ -10,5 +10,5 @@ class ResPartner(models.Model):
     @api.model
     def search(self, args, offset=0, limit=None, order=None, count=False):
         if self.env.user.has_group('maqabim_extended_security.group_hide_vendors'):
-            args.append((('supplier', '=', False)))
+            args.append((('supplier_rank', '=', 0)))
         return super(ResPartner, self).search(args, offset=offset, limit=limit, order=order, count=count)

@@ -5,11 +5,17 @@
 	    <field name="model">res.users</field>
 	    <field name="inherit_id" ref="base.view_users_form"/>
 	    <field name="arch" type="xml">
-	    	<xpath expr="//field[@name='pos_security_pin']" position="after">
-	    		<!-- <label for="session_ids"/> -->
-	    		<field name="pos_ids" widget="many2many_tags" domain="[('company_id', '=', company_id)]"/>
-	    		<!-- <label for="warehouse_ids"/> -->
-	    		<field name="warehouse_ids" widget="many2many_tags" domain="[('company_id', '=', company_id)]"/>
+	    	<xpath expr="//notebook" position="inside">
+	    		<page name="point_of_sale" string="Point of Sale">
+	    			<group>
+	    				<group>
+		    				<field name="pos_ids" widget="many2many_tags" domain="[('company_id', '=', company_id)]"/>
+	    				</group>
+	    				<group>
+		    				<field name="warehouse_ids" widget="many2many_tags" domain="[('company_id', '=', company_id)]"/>
+	    				</group>
+	    			</group>
+		    	</page>
 	    	</xpath>
 	    </field>
 	</record>

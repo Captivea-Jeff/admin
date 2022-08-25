@@ -1,7 +1,7 @@
 # coding: utf-8
 
 import logging
-
+import pytz
 from odoo import api, models, fields, _, SUPERUSER_ID
 from odoo.exceptions import AccessDenied
 from odoo.http import request
@@ -20,31 +20,21 @@ class ResUsers(models.Model):
         user_company_websites = self.env['website'].search([('company_id', 'in', self.company_ids.ids)])
         self.login_website_ids = user_company_websites + self.registered_on_website_id
 
-
     @classmethod
-    def _login(cls, db, login, password):
-        """
-            override to allow user to login based on their allowed company's website
-            for example -
-            Maq users should not be able to use their login to login through the joint portal and
-            vice versa (joint user should not be able to login to portal using Maq website)
-            unless they are a user with access to both companies.
-
-            UPDATE CHANGES ARE MARKED WITH 'CUSTOM'
-        """
-        #TODO - can we use registered_on_website_id field of res users?
+    def _login(cls, db, login, password, user_agent_env):
         if not password:
-            return False
-        user_id = False
+            raise AccessDenied()
+        ip = request.httprequest.environ['REMOTE_ADDR'] if request else 'n/a'
         try:
             with cls.pool.cursor() as cr:
                 self = api.Environment(cr, SUPERUSER_ID, {})[cls._name]
-                user = self.search([('login', '=', login)])
-                if user:
-                    # START====
-                    #TODO: cleanup + better logic
+                with self._assert_can_auth():
+                    user = self.search(self._get_login_domain(login), order=self._get_login_order(), limit=1)
+                    if not user:
+                        raise AccessDenied()
+                    # custom code
                     current_website_id = self.env['website'].get_current_website()
-                    if user.id != SUPERUSER_ID:
+                    if user.id not in (SUPERUSER_ID, 2):
                         # Interal user can auth from different website as some company may 
                         # not have website so auth trough website of other company or
                         # allowed login website.
@@ -55,29 +45,31 @@ class ResUsers(models.Model):
                             print (auth_allow_website)
                             if current_website_id not in user.login_website_ids:
                                 _logger.info('Multi-website login failed for db:%s login:%s website_id:%s', db, login, current_website_id)
-                                user = False
+                                raise AccessDenied()
                         elif current_website_id.company_id.id not in user.company_ids.ids:
                             _logger.info('Multi-website company login failed for db:%s login:%s website_id:%s', db, login, current_website_id)
-                            user = False
-                    #  END====
+                            raise AccessDenied()
+                    # End Custom Code
                     if user and current_website_id:
                         try:
-                            user_id = user.id
-                            user.sudo(user_id).check_credentials(password)
-                            user.sudo(user_id)._update_last_login()
+                            user = user.with_user(user)
+                            user._check_credentials(password, user_agent_env)
+                            tz = request.httprequest.cookies.get('tz') if request else None
+                            if tz in pytz.all_timezones and (not user.tz or not user.login_date):
+                                # first login or missing tz -> set tz to browser tz
+                                user.tz = tz
+                            user._update_last_login()
                         except AccessDenied:
                             _logger.info('Multi-website login failed for db:%s login:%s website_id:%s', db, login, current_website_id)
-                            user_id = False
+                            raise AccessDenied()
+
                     else:
-                        user_id = False
-                else:
-                    user_id = False
+                        raise AccessDenied()
+
         except AccessDenied:
-            _logger.info('login failed for db:%s login:%s', db, login)
-            user_id = False
+            _logger.info("Login failed for db:%s login:%s from %s", db, login, ip)
+            raise AccessDenied()
 
-        status = "successful" if user_id else "failed"
-        ip = request.httprequest.environ['REMOTE_ADDR'] if request else 'n/a'
-        _logger.info("Login %s for db:%s login:%s from %s", status, db, login, ip)
+        _logger.info("Login successful for db:%s login:%s from %s", db, login, ip)
 
-        return user_id
+        return user.id

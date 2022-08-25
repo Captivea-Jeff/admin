@@ -24,11 +24,8 @@
 	    	<xpath expr="//field[@name='cash_register_id']" position="after">
 	    		<field name="restrict_session_closing" invisible="1"/>
 	    	</xpath>
-	    	<xpath expr="//button[@name='action_pos_session_validate']" position="attributes">
-	    		<attribute name="attrs">{'invisible': ['|', ('restrict_session_closing', '=', True), ('state', '!=', 'closing_control')]}</attribute>
-	    	</xpath>
-	    	<xpath expr="//button[@name='action_pos_session_closing_control'][2]" position="attributes">
-	    		<attribute name="attrs">{'invisible' : ['|', ('restrict_session_closing', '=', True), '|', ('cash_control', '=', True),('state', '!=', 'opened')]}</attribute>
+	    	<xpath expr="//button[@name='action_pos_session_closing_control']" position="attributes">
+	    		<attribute name="attrs">{'invisible': [ '|', ('restrict_session_closing', '=', True), '|', '&amp;',('state', '!=', 'closing_control'), ('rescue', '=', False),'&amp;',('state', '=', 'closed'), ('rescue', '=', True)]}</attribute>
 	    	</xpath>
 	    </field>
 	</record>

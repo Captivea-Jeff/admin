@@ -3,28 +3,30 @@
     Copyright 2018-2019 Kolushov Alexandr <https://it-projects.info/team/KolushovAlexandr>
     License MIT (https://opensource.org/licenses/MIT). -->
 <templates id="template" xml:space="preserve">
-    <t t-extend="Product">
-        <t t-jquery=".product-img" t-operation="append">
-            <t t-if="widget.pos.config.show_qtys &amp;&amp; product.type == 'product'">
-                <span
-                    t-attf-class="qty-tag #{product.qty_available lte 0 ? 'not-available':''}"
-                >
-                    <t t-esc="product.qty_available" />
+    <t t-inherit="point_of_sale.ProductItem" t-inherit-mode="extension" owl="1">
+        <xpath expr="//i[hasclass('product-info-button')]" t-operation="after">
+            <t t-if="props.product.qty_available != 0">
+            <span class="qty-tag">
+                <t t-esc="props.product.qty_available"/>
+            </span>
+            </t>
+            <t t-else="">
+                <span class="qty-tag not-available">
+                    <t t-esc="props.product.qty_available"/>
                 </span>
             </t>
-        </t>
+        </xpath>
     </t>
-    <t t-extend="Orderline">
-        <t t-jquery=".info-list>t:first-child">
-            this.attr('t-if', "line.get_quantity_str() !== '1' || line.selected || line.get_product().qty_available lt line.quantity ");
-        </t>
-        <t t-jquery="t[t-esc='line.get_quantity_str()']" t-operation="after">
-            <t t-if="widget.pos.config.show_qtys &amp;&amp; line.get_product().type == 'product'">
-                <t t-set='qty_available' t-value='line.get_product().qty_available' />
-                (of <span t-attf-class="qty-info #{qty_available lt line.quantity ? 'not-available':''}">
-                    <t t-esc="qty_available" />
-                </span>)
-            </t>
-        </t>
+
+    <t t-inherit="point_of_sale.Orderline" t-inherit-mode="extension" owl="1">
+        <xpath expr="//em" t-operation="after">
+            <t t-if="props.line.product.type == 'product'">
+                (of
+                    <span t-attf-class="qty-info #{'not-available' if props.line.quantity > props.line.product.qty_available else '' }">
+                        <t t-esc="props.line.product.qty_available"/>
+                    </span>
+                    )
+                </t>
+        </xpath>
     </t>
 </templates>

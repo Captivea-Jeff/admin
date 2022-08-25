@@ -4,7 +4,6 @@ odoo.define('website_search.custom', function (require) {
     var ajax = require('web.ajax');
 
     $(document).ready(function () {
-
         $('.as-search input[name="search"]').keyup(function(ev){
             var search_keyword = $(ev.target).val();
             ajax.jsonRpc("/search_result", 'call', {

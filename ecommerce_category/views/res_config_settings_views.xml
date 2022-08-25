@@ -7,7 +7,6 @@
             <field name="inherit_id" ref="website.res_config_settings_view_form"/>
             <field name="arch" type="xml">
                 <data>
-
                     <xpath expr="//div[@id='cdn_setting']" position="after">
                         <div class="col-xs-12 col-md-6 o_setting_box" id="force_shop_login" title="Requires registration to shop.">
                             <div class="o_setting_left_pane">

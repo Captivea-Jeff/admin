@@ -19,12 +19,20 @@
     # "currency": "EUR",
     "depends": ["point_of_sale", "stock"],
     "external_dependencies": {"python": [], "bin": []},
-    "data": ["data.xml", "views/views.xml"],
-    "qweb": ["static/src/xml/pos.xml"],
-    "post_load": None,
-    "pre_init_hook": None,
-    "post_init_hook": None,
-    "uninstall_hook": None,
+    "data": ["views/views.xml"],
+
+    'assets': {
+        'point_of_sale.assets': [
+            'pos_product_available/static/src/js/pos.js',
+            'pos_product_available/static/src/css/pos.css'
+        ],
+        'web.assets_backend': [
+            'pos_product_available/static/src/js/test_pos_quantities.js',
+        ],
+        'web.assets_qweb': [
+            'pos_product_available/static/src/xml/pos.xml',
+        ],
+    },
     "auto_install": False,
     "installable": True,
 }

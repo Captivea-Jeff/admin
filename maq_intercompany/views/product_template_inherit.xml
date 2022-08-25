@@ -52,8 +52,9 @@
              </xpath>
         </field>
     </record>
+    <!--Following Changes adapted in V15-->
     <!-- The following field is replaced in kanban view against the lst_price field. -->
-    <record id="product_template_kanban_view_maq_inherit" model="ir.ui.view">
+    <!-- <record id="product_template_kanban_view_maq_inherit" model="ir.ui.view">
         <field name="name">product.template.kanban.view.maq.inherit</field>
         <field name="model">product.template</field>
         <field name="inherit_id" ref="product.product_template_kanban_view"/>
@@ -62,6 +63,6 @@
                 <field name="list_price" widget="monetary" options="{'currency_field': 'currency_id', 'field_digits': True}"></field>
             </xpath>
         </field>
-    </record>
+    </record> -->
 
 </odoo>

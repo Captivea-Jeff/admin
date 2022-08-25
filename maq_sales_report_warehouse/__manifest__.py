@@ -10,7 +10,7 @@
     "author": "Bista Solutions Pvt. Ltd.",
     "maintainer": "Bista Solutions Pvt. Ltd.",
     "website": "https://www.bistasolutions.com",
-    'depends': ['stock'],
+    'depends': ['stock','shopify_connector'],
     'category': 'Warehouse',
     'data': [
         'security/sales_report_security.xml',
@@ -18,6 +18,7 @@
         'views/custom_sales_report_view.xml',
         'views/shopify_warehouse_view.xml'
     ],
+    'license': 'LGPL-3',
     'installable': True,
     'application': True,
     'auto_install': False,

@@ -19,4 +19,4 @@ class PosCategory(models.Model):
                  ('parent_id.parent_id.name', operator, name), ('parent_id.parent_id.parent_id.name', operator, name)]
             ])
             return self.search(domain, limit=limit).name_get()
-        return super(SaleOrder, self).name_search(name, args, operator, limit)
+        return super(PosCategory, self).name_search(name, args, operator, limit)

@@ -4,8 +4,9 @@ from odoo import models, fields, api
 
 
 class StockMoveLine(models.Model):
-
     _inherit = 'stock.move.line'
+
+    m_warehouse_id = fields.Many2one("stock.warehouse", compute='_get_m_warehouse_id', string="Warehouse", store=True)
 
     @api.depends('location_id', 'location_dest_id')
     def _get_m_warehouse_id(self):
@@ -15,9 +16,6 @@ class StockMoveLine(models.Model):
         """
         for rec in self:
             if rec.location_id.usage == 'internal':
-                rec.m_warehouse_id = rec.location_id.get_warehouse().id
+                rec.m_warehouse_id = rec.location_id.warehouse_id.id
             elif rec.location_dest_id.usage == 'internal':
-                rec.m_warehouse_id = rec.location_dest_id.get_warehouse().id
-
-    m_warehouse_id = fields.Many2one(
-        "stock.warehouse", compute='_get_m_warehouse_id', string="Warehouse", store=True)
+                rec.m_warehouse_id = rec.location_dest_id.warehouse_id.id

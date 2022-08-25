@@ -43,40 +43,11 @@
                                 <field name="m_sales_end_date" attrs="{'readonly': [('is_lock', '=', True)]}"/>
                             </group>
                         </group>
-                        <!-- <group attrs="{'readonly': [('is_lock', '=', True)]}" col="6" colspan="3">
-                            <label for="m_product_ids" string="AND" />
-                            <field name="m_product_ids" string="Products" widget="many2many_tags" nolabel="1"
-                                help="Add product here which you would like to filter"
-                                placeholder="Products" attrs="{'readonly': [('is_lock', '=', True)]}"
-                                options="{'no_create': True, 'no_create_edit': True, 'no_open': True}"/>
-                            <label for="m_internal_ref" string="OR" />
-                            <field name="m_internal_ref" string="Internal Reference"  nolabel="1"
-                                help="Add internal ref here which you would like to filter"
-                                placeholder="Internal Reference" attrs="{'readonly': [('is_lock', '=', True)]}"/>
-                            <label for="m_prod_ref" string="OR" />
-                            <field name="m_prod_ref" string="Products Reference"  nolabel="1"
-                                help="Add product name here which you would like to filter"
-                                placeholder="Product1,Product2" attrs="{'readonly': [('is_lock', '=', True)]}"/>
-                        </group> -->
-                        <!-- <group attrs="{'readonly': [('is_lock', '=', True)]}">
-                            <field name="partner_ids" widget="many2many_tags"/>
-                            <label string="AND" />
-                            <label string="(" />
-                            <field name="product_ids" string="Products" widget="many2many_tags"/>
-                            <label string="OR" />
-                            <field name="internal_ref" string="Internal Reference" />
-                            <label string=")" />
-                        </group> -->
+
                         <notebook>
                             <page name="filters" string="Filter">
                                 <group attrs="{'readonly': [('is_lock', '=', True)]}" col="6" colspan="3">
-                                    <!-- <field name="partner_ids" widget="many2many_tags" nolabel="1"
-                                        help="Add vendors here which you would like to filter"
-                                        placeholder="Vendors" attrs="{'readonly': [('is_lock', '=', True)]}"
-                                        options="{'no_create': True, 'no_create_edit': True, 'no_open': True}"
-                                        domain="[('supplier','=',True)]"
-                                        context="{'search_default_supplier':1, 'default_supplier':1, 'default_customer':0}"/>
-                                    <label for="product_ids" string="AND" /> -->
+
                                     <field name="product_ids" string="Products" widget="many2many_tags" nolabel="1"
                                         help="Add product here which you would like to filter"
                                         placeholder="Products" attrs="{'readonly': [('is_lock', '=', True)]}"
@@ -97,8 +68,8 @@
                                         help="Add vendors here which you would like to filter"
                                         placeholder="Vendors" attrs="{'readonly': [('is_lock', '=', True)]}"
                                         options="{'no_create': True, 'no_create_edit': True, 'no_open': True}"
-                                        domain="[('supplier','=',True)]"
-                                        context="{'search_default_supplier':1, 'default_supplier':1, 'default_customer':0}"/>
+                                        domain="[('supplier_rank','=',1)]"
+                                        context="{'search_default_supplier_rank':1, 'default_supplier_rank':1, 'default_customer_rank':0}"/>
                                 </group>
                                 <group attrs="{'invisible': [('is_lock', '=', True)]}" col="6" colspan="3">
                                     <button name="add_filter" string="Filter" type="object" class="oe_highlight"/>
@@ -191,9 +162,7 @@
         <record id="action_custom_sales_report" model="ir.actions.act_window">
             <field name="name">Sales Report</field>
             <field name="res_model">sales.report</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
-            <field name="tree_view_id" ref="view_custom_sales_report_tree"/>
+            <field name="view_mode">tree,form,search</field>
             <field name="search_view_id" ref="view_custom_sales_report_search"/>
         </record>
         
@@ -203,6 +172,5 @@
             parent="stock.menu_stock_warehouse_mgmt"
             groups="maq_sales_report_warehouse.group_sales_report_manager,base.group_system"
             sequence="30"/>
-        
     </data>
 </odoo>

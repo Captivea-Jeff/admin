@@ -14,7 +14,6 @@ odoo.define("pos_product_available.PosModel", function(require) {
     models.PosModel = models.PosModel.extend({
         load_server_data: function() {
             var self = this;
-
             var loaded = PosModelSuper.load_server_data.call(this);
 
             var prod_model = _.find(this.models, function (model) {
@@ -23,14 +22,14 @@ odoo.define("pos_product_available.PosModel", function(require) {
             if (prod_model) {
                 prod_model.fields.push("qty_available", "type");
                 var context_super = prod_model.context;
-                prod_model.context = function (that) {
-                    var ret = context_super(that);
-                    ret.location = that.config.stock_location_id[0];
+                prod_model.context = function (self) {
+                    var ret = context_super(self);
+                    ret.location = self.config.stock_location_id[0];
                     return ret;
                 };
                 var loaded_super = prod_model.loaded;
-                prod_model.loaded = function (that, products) {
-                    loaded_super(that, products);
+                prod_model.loaded = function (self, products) {
+                    loaded_super(self, products);
                     self.db.product_qtys = products;
                 };
                 return loaded;
@@ -114,18 +113,18 @@ odoo.define("pos_product_available.PosModel", function(require) {
     models.Orderline = models.Orderline.extend({
         export_as_JSON: function () {
             var data = OrderlineSuper.prototype.export_as_JSON.apply(this, arguments);
-            data.qty_available = this.product.qty_available;
+            data.restrict = this.product.qty_available;
             return data;
         },
         // Compatibility with pos_multi_session
-        apply_ms_data: function (data) {
-            if (OrderlineSuper.prototype.apply_ms_data) {
-                OrderlineSuper.prototype.apply_ms_data.apply(this, arguments);
-            }
-            var product = this.pos.db.get_product_by_id(data.product_id);
-            if (product.qty_available !== data.qty_available) {
-                this.pos.set_product_qty_available(product, data.qty_available);
-            }
-        },
+//        apply_ms_data: function (data) {
+//            if (OrderlineSuper.prototype.apply_ms_data) {
+//                OrderlineSuper.prototype.apply_ms_data.apply(this, arguments);
+//            }
+//            var product = this.pos.db.get_product_by_id(data.product_id);
+//            if (product.qty_available !== data.qty_available) {
+//                this.pos.set_product_qty_available(product, data.qty_available);
+//            }
+//        },
     });
 });

@@ -1,39 +1,42 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-    <template id="products_inherit_search" inherit_id="theme_loftspace_sale.products">
-        <xpath expr="//t[@t-call='theme_loftspace_sale.search']" position="replace">
-            <div class="col-md-12">
-                <div class="as-search">
-                    <form method="get" t-att-data-search-all="request.website.search_all_products"
-                          t-att-action="keep('/shop'+ ('/category/'+slug(category)) if (category and not website.search_all_products) else None, search=0)">
-                        <div class="input-group">
-                            <div class="oe_search">
-                                <input type="text" name="search"
-                                       placeholder="Search" autocomplete="off"
-                                       class="form-control pagination form-inline col-md-12 oe_search_box"
-                                       t-att-value="search"/>
-                            </div>
-                            <span class="input-group-btn">
-                                <button class="btn btn-default oe_search_button">
-                                    <i class="fa fa-search"/>
-                                </button>
-                            </span>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div id="algolia-autocomplete-container"
-                     style="position: relative;">
-                    <span class="aa-dropdown-menu aa-with-products aa-with-0 hide"
-                          role="listbox" id="algolia-autocomplete-listbox-0">
-                    </span>
-                </div>
-            </div>
-        </xpath>
-    </template>
+
+    <!--theme_loftspace_sale module has been deprecated in v15 so below (products_inherit_search) template will not work in v15 -->
+
+<!--    <template id="products_inherit_search" inherit_id="theme_loftspace_sale.products">-->
+<!--        <xpath expr="//t[@t-call='theme_loftspace_sale.search']" position="replace">-->
+<!--            <div class="col-md-12">-->
+<!--                <div class="as-search">-->
+<!--                    <form method="get" t-att-data-search-all="request.website.search_all_products"-->
+<!--                          t-att-action="keep('/shop'+ ('/category/'+slug(category)) if (category and not website.search_all_products) else None, search=0)">-->
+<!--                        <div class="input-group">-->
+<!--                            <div class="oe_search">-->
+<!--                                <input type="text" name="search"-->
+<!--                                       placeholder="Search" autocomplete="off"-->
+<!--                                       class="f orm-control pagination form-inline col-md-12 oe_search_box"-->
+<!--                                       t-att-value="search"/>-->
+<!--                            </div>-->
+<!--                            <span class="input-group-btn">-->
+<!--                                <button class="btn btn-default oe_search_button">-->
+<!--                                    <i class="fa fa-search"/>-->
+<!--                                </button>-->
+<!--                            </span>-->
+<!--                        </div>-->
+<!--                    </form>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-md-12">-->
+<!--                <div id="algolia-autocomplete-container"-->
+<!--                     style="position: relative;">-->
+<!--                    <span class="aa-dropdown-menu aa-with-products aa-with-0 hide"-->
+<!--                          role="listbox" id="algolia-autocomplete-listbox-0">-->
+<!--                    </span>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </xpath>-->
+<!--    </template>-->
     <template id="product_search_inherit" inherit_id="website_sale.product">
-        <xpath expr="//t[@t-call='website_sale.search']" position="replace"/>
+<!--        <xpath expr="//t[@t-call='website_sale.search']" position="replace"/>-->
         <xpath expr="//div[hasclass('row')]" position="before">
             <div class="row">
                 <div class="col-md-12">

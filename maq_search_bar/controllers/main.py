@@ -11,6 +11,7 @@ class WebsiteSaleCustom(WebsiteSale):
     def search_result(self, search_keyword=None):
         prod_obj = request.env['product.template']
         category_obj = request.env['product.public.category']
+        print ("\n\nDDDDDDDDDDDDDDD", search_keyword)
         if search_keyword:
             current_website = request.env['website'].get_current_website()
             product_count = prod_obj.search_count([

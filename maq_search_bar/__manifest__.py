@@ -12,12 +12,18 @@
     Theme Search bar product list
         """,
     'depends': [
-        'website_sale'
+        'website_sale',
     ],
     'data': [
-        'view/assets.xml',
         'view/header.xml'
     ],
+    'assets': {
+        # 'website.assets_frontend': [
+        'web.assets_frontend': [
+            '/maq_search_bar/static/src/scss/website_search.scss',
+            '/maq_search_bar/static/src/js/website_search.js',
+        ],
+    },
     'installable': True,
     'application': True,
 }
