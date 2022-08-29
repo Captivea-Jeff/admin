@@ -40,13 +40,20 @@
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_sales_order_filter"/>
             <field name="arch" type="xml">
+                <xpath expr="//field[@name='team_id']" position="after">
+                    <field name="shopify_import_status"/>
+                    <field name="shopify_config_id"/>
+                </xpath>
                 <xpath expr="//filter[@name='activities_upcoming_all']" position="after">
                     <filter string="Shopify Orders" name="shopify_order_id"
-                        domain="[('shopify_order_id', '!=', ('',False))]"/>
+                        domain="[('shopify_order_id', '!=', False)]"/>
                 </xpath>
+
                 <xpath expr="//group" position="inside">
-                    <filter string="Shopify Import Status" domain="[]" context="{'group_by':'shopify_import_status'}"/>
-                    <filter string="Shopify Config" domain="[]" context="{'group_by':'shopify_config_id'}"/>
+                    <filter string="Shopify Import Status" name="shopify_import_status"
+                            domain="[]" context="{'group_by':'shopify_import_status'}"/>
+                    <filter string="Shopify Config" name="shopify_config_id"
+                            domain="[]" context="{'group_by':'shopify_config_id'}"/>
                 </xpath>
             </field>
         </record>
@@ -58,7 +65,8 @@
                 <tree string="Sales Orders" decoration-bf="message_needaction==True" decoration-muted="state=='cancel'">
                     <field name="message_needaction" invisible="1"/>
                     <field name="name" string="Order Number"/>
-                    <field name="confirmation_date" string="Order Date"/>
+                    <!--TODO-->
+                    <!--<field name="confirmation_date" string="Order Date"/>-->
                     <field name="partner_id"/>
                     <field name="user_id"/>
                     <field name="amount_total" sum="Total Tax Included" widget="monetary"/>
@@ -74,9 +82,8 @@
         <record id="maq_sale_order_shopify_operation_action" model="ir.actions.act_window">
             <field name="name">Sale Order</field>
             <field name="res_model">sale.order</field>
-            <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
-            <field name="tree_view_id" ref="shopify_connector.maq_shopify_sale_order_tree_new_view"/>
+            <field name="view_id" ref="shopify_connector.maq_shopify_sale_order_tree_new_view" />
             <field name="context">{'shopify_sale_order': 1, 'default_search_shopify_order_id':1}</field>
         </record>
     </data>

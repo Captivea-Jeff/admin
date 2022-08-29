@@ -96,7 +96,6 @@
         <record id="action_shopify_product_product" model="ir.actions.act_window">
             <field name="name">Shopify Product Product</field>
             <field name="res_model">shopify.product.product</field>
-            <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="search_view_id" ref="shopify_connector.view_shopify_product_product_search"/>
         </record>

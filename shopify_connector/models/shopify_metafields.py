@@ -10,18 +10,17 @@ class ShopifyMetafields(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin', 'portal.mixin']
     _rec_name = 'key'
 
-    key = fields.Char("Key", required=True, help="Enter Key", track_visibility="onchange")
+    key = fields.Char("Key", required=True, help="Enter Key", tracking=True)
     value = fields.Char("Value", required=True, help="Enter Value",
-                        track_visibility="onchange")
-    value_type = fields.Selection({('string','string'),
+                        tracking=True)
+    value_type = fields.Selection([('string','string'),
                                    ('integer','integer'),
-                                   ('json_string','json_string')},
+                                   ('json_string','json_string')],
                                   "Value Type", required=True, help="Enter Value Type",
-                                  track_visibility="onchange")
+                                  tracking=True)
     namespace = fields.Char(
-        "Namespace", required=True, help="Enter Value Type", track_visibility="onchange")
+        "Namespace", required=True, help="Enter Value Type", tracking=True)
 
-    @api.multi
     def name_get(self):
         result = []
         for rec in self:
@@ -38,7 +37,6 @@ class ShopifyMetafields(models.Model):
                 raise ValidationError(_("Please enter integer value for integer type"))
         return res
 
-    @api.multi
     def write(self, vals):
         res = super(ShopifyMetafields, self).write(vals)
         for rec in self:

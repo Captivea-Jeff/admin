@@ -4,7 +4,7 @@
     'name': 'Shopify Connector',
     'category': 'Odoo Connector',
     'summary': 'Publish your products on Shopify and creation of orders in Odoo.',
-    'version': '11.0.1.0.0',
+    'version': '15.0.1.0.0',
     'author': 'Bista Solutions',
     'website': 'http://www.bistasolutions.com',
     'license': 'AGPL-3',
@@ -23,9 +23,12 @@ Key Features
     'depends': [
         'product',
         'sale',
+        'website_sale',
         'account',
         'sale_stock',
+        'purchase',
         'delivery',
+        'maqabim_purchase',
     ],
     'data': [
         'security/shopify_connector_security.xml',

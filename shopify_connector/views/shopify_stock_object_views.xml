@@ -6,7 +6,7 @@
             <field name="model">stock.location</field>
             <field name="inherit_id" ref="stock.view_location_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//form/group" position="inside">
+                <xpath expr="//field[@name='comment']" position="before">
                     <group string="Shopify">
                         <field name="shopify_location_ids" widget="many2many_tags" options="{'no_create': True, 'no_create_edit': True, 'no_open': True}"
                         groups="shopify_connector.group_shopify_admin,shopify_connector.group_shopify_manager,shopify_connector.group_shopify_user"/>

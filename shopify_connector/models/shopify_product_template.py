@@ -13,13 +13,13 @@ from odoo.exceptions import ValidationError
 _logger = logging.getLogger(__name__)
 _product_list = []
 
+
 class ShopifyProductTemplate(models.Model):
     _name = 'shopify.product.template'
     _description = 'Shopify Product Template'
     _inherit = ['mail.thread', 'mail.activity.mixin', 'portal.mixin']
     _rec_name = 'product_tmpl_id'
 
-    @api.multi
     @api.onchange('shopify_config_id')
     def onchange_shopify_config(self):
         '''
@@ -32,33 +32,33 @@ class ShopifyProductTemplate(models.Model):
                 return {'domain': {'vendor': [('shopify_config_id', '=', rec.shopify_config_id.id)],
                                    'product_type': [('shopify_config_id', '=', rec.shopify_config_id.id)]}}
 
-    name = fields.Char("Name", help="Enter Name", track_visibility='onchange')
+    name = fields.Char("Name", help="Enter Name", tracking=True)
     shopify_config_id = fields.Many2one("shopify.config", "Shopify Config",
-                                        help="Enter Shopify Config", track_visibility='onchange', required=True)
+                                        help="Enter Shopify Config", tracking=True, required=True)
     body_html = fields.Html("Body Html", help="Enter Body Html",
-                            track_visibility='onchange', translate=html_translate)
+                            tracking=True, translate=html_translate)
     vendor = fields.Many2one("shopify.vendor", "Shopify Vendor",
-                             help="Enter Shopify Vendor", track_visibility='onchange')
+                             help="Enter Shopify Vendor", tracking=True)
     product_type = fields.Many2one("shopify.product.type", "Shopify Product Type",
-                                   help="Enter Shopify Product Type", track_visibility='onchange')
+                                   help="Enter Shopify Product Type", tracking=True)
     shopify_published = fields.Boolean(
-        "Shopify Published",  help="Enter Shopify Published", track_visibility='onchange', default=True)
+        "Shopify Published",  help="Enter Shopify Published", tracking=True, default=True)
     shopify_prod_tmpl_id = fields.Char(
-        "Shopify Product Template ID", help="Enter Shopify Product Template ID", track_visibility='onchange', readonly=True)
+        "Shopify Product Template ID", help="Enter Shopify Product Template ID", tracking=True, readonly=True)
     meta_fields_ids = fields.Many2many("shopify.metafields",
-                                     help="Enter Shopify Metafields", track_visibility='onchange')
+                                     help="Enter Shopify Metafields", tracking=True)
     image_ids = fields.Many2many("shopify.images", 'shopify_product_template_images_rel', 'product_template_id',
-                                 'image_id', "Shopify Images", help="Enter Shopify Metafields", track_visibility='onchange')
+                                 'image_id', "Shopify Images", help="Enter Shopify Metafields", tracking=True)
     product_tmpl_id = fields.Many2one(
-        "product.template", "Product Template", help="Enter Product Template", required=True, track_visibility='onchange')
+        "product.template", "Product Template", help="Enter Product Template", required=True, tracking=True)
     shopify_error_log = fields.Text(
         "Shopify Error", help="Error occurs while exporting move to the shopify",
         readonly=True)
-    # check_multi_click = fields.Boolean("Multi Click", help="Check Multi Click?", track_visibility='onchange', readonly=True)
+    # check_multi_click = fields.Boolean("Multi Click", help="Check Multi Click?", tracking=True, readonly=True)
 
-    r_prod_tags = fields.Many2many(related='product_tmpl_id.prod_tags_ids', string='Product Tags', track_visibility='onchange')
-    r_prov_tags = fields.Many2many(related='product_tmpl_id.province_tags_ids', string='Province Tags', track_visibility='onchange')
-    r_allowed_variants = fields.One2many(related='product_tmpl_id.allowed_variants_ids', string='Allowed Variants', track_visibility='onchange', readonly=True)
+    r_prod_tags = fields.Many2many(related='product_tmpl_id.prod_tags_ids', string='Product Tags', tracking=True)
+    r_prov_tags = fields.Many2many(related='product_tmpl_id.province_tags_ids', string='Province Tags', tracking=True)
+    r_allowed_variants = fields.One2many(related='product_tmpl_id.allowed_variants_ids', string='Allowed Variants', tracking=True, readonly=True)
     last_updated_date = fields.Datetime(string='Last Updated Date', readonly=True)
 
     @api.model
@@ -76,7 +76,6 @@ class ShopifyProductTemplate(models.Model):
                 _("You cannot create multiple records for same shopify configuration"))
         return res
 
-    @api.multi
     def write(self, vals):
         '''
         Prevent the user to update a shopify product template record with the same shopify config.
@@ -94,7 +93,6 @@ class ShopifyProductTemplate(models.Model):
                     _("You cannot create multiple records for same shopify configuration"))
         return res
 
-    @api.multi
     def export_shopify(self):
         '''
         This method is called by export button and it checks if product or province tags are set and then,
@@ -109,7 +107,6 @@ class ShopifyProductTemplate(models.Model):
                     raise ValidationError(
                         _("Please select atleast 1 product or province tags before exporting product to shopify!"))
 
-    @api.multi
     def update_shopify_product(self):
         '''
         Process shopify product template updation from odoo to shopify
@@ -120,7 +117,7 @@ class ShopifyProductTemplate(models.Model):
         3. If the product exists on shopify then only it will update, else it will throw validation error
         4. Set all the fields values on shopify product and save the shopify product object.
         '''
-        self.shopify_config_id.test_connection()
+        self.shopify_config_id.check_connection()
         for rec in self:
             record_id = rec.id
             product_tmpl_rec = rec.product_tmpl_id
@@ -147,7 +144,7 @@ class ShopifyProductTemplate(models.Model):
                         for prov_tag in province_tags:
                             str_prod_province_tags.append(prov_tag.name)
                         product_template_tags = ",".join(str_prod_province_tags)
-                        product_template_image = product_tmpl_rec.image.decode('utf-8') if product_tmpl_rec.image else False
+                        product_template_image = product_tmpl_rec.image_1920.decode('utf-8') if product_tmpl_rec.image_1920 else False
                         product_template_metafields = rec.meta_fields_ids
                         product_template_metafields_keys = [mt.key for mt in product_template_metafields]
                         shopify_product = shopify.Product({'id': shopify_product_id, 'published': rec.shopify_published})
@@ -157,8 +154,8 @@ class ShopifyProductTemplate(models.Model):
                         if product_template_image:
                             image_list = [{'attachment': product_template_image,
                                            'position': 1}]
-                        for product_image in product_tmpl_rec.product_image_ids:
-                            image_list.append({'attachment': product_image.image.decode('utf-8')})
+                        for product_image in product_tmpl_rec.product_template_image_ids:
+                            image_list.append({'attachment': product_image.image_1920.decode('utf-8')})
                         get_images = shopify.Image.find(product_id=rec.shopify_prod_tmpl_id)
                         if get_images:
                             for images in get_images:

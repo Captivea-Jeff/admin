@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import logging
-from odoo import models, fields, api
+from odoo import models, fields, api, _
+from odoo.exceptions import ValidationError
 
 _logger = logging.getLogger(__name__)
 
@@ -12,51 +13,44 @@ class ShopifyLocations(models.Model):
     _description = 'Shopify Locations'
 
     shopify_config_id = fields.Many2one("shopify.config", "Shopify Configuration",
-                                        help="Enter Shopify Config.", track_visibility='onchange', required=True)
+                                        help="Enter Shopify Config.", tracking=True, required=True)
     shopify_location_id = fields.Char(
-        string="Shopify Location ID", help="Enter Shopify Location ID", track_visibility='onchange', required=True)
+        string="Shopify Location ID", help="Enter Shopify Location ID", tracking=True, required=True)
     name = fields.Char("Name", help="Enter Name",
-                       track_visibility='onchange', required=True)
+                       tracking=True, required=True)
     address1 = fields.Char(
-        "Address1", help="Enter Address1", track_visibility='onchange')
+        "Address1", help="Enter Address1", tracking=True)
     address2 = fields.Char(
-        "Address2", help="Enter Address2", track_visibility='onchange')
-    city = fields.Char("City", help="Enter City", track_visibility='onchange')
-    zip = fields.Char("Zip", help="Enter Zip", track_visibility='onchange')
+        "Address2", help="Enter Address2", tracking=True)
+    city = fields.Char("City", help="Enter City", tracking=True)
+    zip = fields.Char("Zip", help="Enter Zip", tracking=True)
     province = fields.Char(
-        "Province", help="Enter Province", track_visibility='onchange')
-    # country = fields.Char("Country", help="Enter Country", track_visibility='onchange')
+        "Province", help="Enter Province", tracking=True)
+    # country = fields.Char("Country", help="Enter Country", tracking=True)
     phone = fields.Char("Phone", help="Enter Phone",
-                        track_visibility='onchange')
+                        tracking=True)
     created_at_shopify = fields.Char(
-        "Created at Shopify", help="Enter Created at Shopify", track_visibility='onchange')
+        "Created at Shopify", help="Enter Created at Shopify", tracking=True)
     updated_at_shopify = fields.Char(
-        "Updated at Shopify", help="Enter Updated at Shopify", track_visibility='onchange')
+        "Updated at Shopify", help="Enter Updated at Shopify", tracking=True)
     country_code = fields.Char(
-        "Country Code", help="Enter Country Code", track_visibility='onchange')
+        "Country Code", help="Enter Country Code", tracking=True)
     country_name = fields.Char(
-        "Country Name", help="Enter Country Name", track_visibility='onchange')
+        "Country Name", help="Enter Country Name", tracking=True)
     province_code = fields.Char(
-        "Province Code", help="Enter Province Code", track_visibility='onchange')
+        "Province Code", help="Enter Province Code", tracking=True)
     legacy = fields.Char("Legacy", help="Enter Legacy",
-                         track_visibility='onchange')
+                         tracking=True)
     active = fields.Boolean("Active", help="Enter Active",
-                            track_visibility='onchange', default=True)
+                            tracking=True, default=True)
 
-    @api.multi
+    @api.constrains('shopify_location_id')
     def check_shopify_location_id_uniq(self):
         for rec in self:
             search_product_count = self.sudo().search_count(
                 [('shopify_location_id', '=', rec.shopify_location_id)])
             if search_product_count > 1:
-                return False
-            else:
-                return True
-
-    _constraints = [
-        (check_shopify_location_id_uniq,
-         'Shopify location id must be unique!', ['shopify_location_id']),
-    ]
+                raise ValidationError(_('Shopify location id must be unique!'))
 
 
 class StockLocation(models.Model):
@@ -86,8 +80,8 @@ class StockLocation(models.Model):
     #      'Shopify location id must be unique!', ['shopify_location_id']),
     # ]
 
-class StockPicking(models.Model):
 
+class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
     shopify_fulfillment_id = fields.Char(
@@ -95,8 +89,8 @@ class StockPicking(models.Model):
     shopify_order_id = fields.Char(
         "Shopify Order ID", help='Enter Shopify Order ID', readonly=True)
 
-class StockMove(models.Model):
 
+class StockMove(models.Model):
     _inherit = 'stock.move'
 
     def _check_location_config(self, location_id, location_dest_id):
@@ -115,8 +109,8 @@ class StockMove(models.Model):
             if valuation_out_account_id:
                 location_dest_company_id = valuation_out_account_id.company_id
 
-    def _action_done(self):
-        moves = super(StockMove, self)._action_done()
+    def _action_done(self, cancel_backorder=False):
+        moves = super(StockMove, self)._action_done(cancel_backorder=cancel_backorder)
         move_ids = moves.filtered(lambda mv:mv.state == 'done')
         for move in move_ids:
             shopify_picking = self._context.get('shopify_picking_validate')
@@ -176,8 +170,8 @@ class StockMove(models.Model):
                     pass
         return moves
 
-class StockMoveLine(models.Model):
 
+class StockMoveLine(models.Model):
     _inherit = 'stock.move.line'
 
     shopify_error_log = fields.Text(

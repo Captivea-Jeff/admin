@@ -8,21 +8,23 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     shopify_name = fields.Char(
-        "Shopify Name", help="Enter Shopify Name", track_visibility='onchange', readonly=True)
+        "Shopify Name", help="Enter Shopify Name", tracking=True, readonly=True)
     shopify_order_id = fields.Char(
-        "Shopify Order ID", help="Enter Shopify Order ID", track_visibility='onchange', readonly=True)
+        "Shopify Order ID", help="Enter Shopify Order ID", tracking=True, readonly=True)
     shopify_note = fields.Char(
-        "Shopify Note", help="Enter Shopify Note", track_visibility='onchange', readonly=True)
+        "Shopify Note", help="Enter Shopify Note", tracking=True, readonly=True)
     shopify_fulfillment_status = fields.Char(
-        "Shopify Fulfillment Status", help="Enter Shopify Fulfillment Status", track_visibility='onchange', readonly=True)
+        "Shopify Fulfillment Status", help="Enter Shopify Fulfillment Status", tracking=True, readonly=True)
     shopify_financial_status = fields.Char(
-        "Shopify Financial Status", help="Enter Shopify Financial Status", track_visibility='onchange', readonly=True)
-    shopify_import_status = fields.Selection([('successfull_import', 'Successfully Imported'), ('fail_to_create_do', 'Failed to Create Delivery Order'), (
-        'fail_to_create_invoice', 'Failed To Create Invoice'), ('other', 'Other')], "Shopify Import Status", help="Enter Shopify Import Status", track_visibility='onchange', readonly=True)
+        "Shopify Financial Status", help="Enter Shopify Financial Status", tracking=True, readonly=True)
+    shopify_import_status = fields.Selection([('successfull_import', 'Successfully Imported'),
+                                              ('fail_to_create_do', 'Failed to Create Delivery Order'),
+                                              ('fail_to_create_invoice', 'Failed To Create Invoice'),
+                                              ('other', 'Other')], "Shopify Import Status",
+                                             help="Enter Shopify Import Status", tracking=True, readonly=True)
     shopify_error_message = fields.Char(
-        "Shopify Error Message", help="Enter Shopify Error Message", track_visibility='onchange', readonly=True)
-    shopify_config_id = fields.Many2one(
-        "shopify.config", "Shopify Config", readonly=True)
+        "Shopify Error Message", help="Enter Shopify Error Message", tracking=True, readonly=True)
+    shopify_config_id = fields.Many2one("shopify.config", "Shopify Config", readonly=True)
 
     @api.model
     def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
@@ -53,12 +55,11 @@ class SaleOrder(models.Model):
             res['arch'] = etree.tostring(doc, encoding='unicode')
         return res
 
-    @api.multi
-    def action_invoice_create(self, grouped=False, final=False):
+    def _create_invoices(self, grouped=False, final=False):
         '''
         Inherit this method to improve the discount price according to invoiced quantities to set exact discount amount
         '''
-        res = super(SaleOrder, self).action_invoice_create(grouped, final)
+        res = super(SaleOrder, self)._create_invoices(grouped, final)
         account_invoice_id = res[0]
         ordered_qty = 0
         invoiced_qty = 0
@@ -67,7 +68,7 @@ class SaleOrder(models.Model):
         inv_qty_subtotal = 0
         order_qty_subtotal = 0
         discount_percentage = 0
-        account_invoice_obj = self.env['account.invoice'].browse(account_invoice_id)
+        account_invoice_obj = account_invoice_id#self.env['account.move'].browse(account_invoice_id)
         invoice_lines = account_invoice_obj.invoice_line_ids
         for order in self:
             order_discount_product = order.order_line.filtered(lambda l: l.product_id.shopify_discount_product)
@@ -96,13 +97,17 @@ class SaleOrder(models.Model):
                 final_discount_amount = float(final_discount_amount)
                 inv_discount_product = invoice_lines.filtered(lambda i: i.product_id.shopify_discount_product)
                 inv_discount_product.price_unit = final_discount_amount
-        #Explicitly compute Tax against invoice
-        account_invoice_obj.compute_taxes()
+
+        # account_invoice_obj.compute_taxes()
+
         return res
 
 
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
+    def _valid_field_parameter(self, field, name):
+        return name == 'tracking' or super()._valid_field_parameter(field, name)
+
     shopify_order_line_id = fields.Char(
-        "Shopify Order Line ID", help="Enter Shopify Order Line ID", track_visibility='onchange', readonly=True)
+        "Shopify Order Line ID", help="Enter Shopify Order Line ID", tracking=True, readonly=True)

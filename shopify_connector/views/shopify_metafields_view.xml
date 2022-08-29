@@ -56,7 +56,6 @@
         <record id="action_shopify_metafields" model="ir.actions.act_window">
             <field name="name">Shopify Metafields</field>
             <field name="res_model">shopify.metafields</field>
-            <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="search_view_id" ref="shopify_connector.view_shopify_metafields_search"/>
         </record>

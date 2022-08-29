@@ -12,6 +12,7 @@ from odoo.exceptions import ValidationError
 _logger = logging.getLogger(__name__)
 _product_variant_list = []
 
+
 class ShopifyProductProduct(models.Model):
     _name = 'shopify.product.product'
     _description = 'Shopify Product Variant'
@@ -28,33 +29,32 @@ class ShopifyProductProduct(models.Model):
                 rec.product_template_id = ""
 
     shopify_product_template_id = fields.Many2one('shopify.product.template', "Shopify Product Template",
-                                                  help="Select Shopify Product Template", track_visibility='onchange', readonly=True)
+                                                  help="Select Shopify Product Template", tracking=True, readonly=True)
     shopify_product_id = fields.Char(
-        "Shopify Product Variant", help="Enter Shopify Product Variant", track_visibility='onchange', readonly=True)
+        "Shopify Product Variant", help="Enter Shopify Product Variant", tracking=True, readonly=True)
     shopify_config_id = fields.Many2one("shopify.config", "Shopify Config",
-                                        help="Enter Shopify Config.", track_visibility='onchange', required=True)
+                                        help="Enter Shopify Config.", tracking=True, required=True)
     shopify_inventory_item_id = fields.Char(
-        "Shopify Inventory Item", help="Enter Shopify Inventory Item", track_visibility='onchange', readonly=True)
+        "Shopify Inventory Item", help="Enter Shopify Inventory Item", tracking=True, readonly=True)
     shopify_published_variant = fields.Boolean(
-        "Shopify Published Variant", default=True, help="Check if Shopify Published Variant or not?", track_visibility='onchange', readonly=True)
+        "Shopify Published Variant", default=True, help="Check if Shopify Published Variant or not?", tracking=True, readonly=True)
     product_template_id = fields.Many2one(
-        "product.template", "Product Template", help="Enter Product Template", compute="_set_prod_template", track_visibility='onchange', store=True)
+        "product.template", "Product Template", help="Enter Product Template", compute="_set_prod_template", tracking=True, store=True)
     product_variant_id = fields.Many2one(
-        "product.product", "Product Variant", help="Enter Product Variant", track_visibility='onchange', required=True, store=True)
+        "product.product", "Product Variant", help="Enter Product Variant", tracking=True, required=True, store=True)
     default_code = fields.Char(
-        "Default Code", help="Enter Default Code", related="product_variant_id.default_code", readonly="1", track_visibility='onchange')
+        "Default Code", help="Enter Default Code", related="product_variant_id.default_code", readonly="1", tracking=True)
     lst_price = fields.Float(
         string='Sale Price', help="Sale price for Shopify", required=True)
     shopify_weight = fields.Float(string="Weight", help="Weight of Product Variants",
                                   related="product_variant_id.weight", readonly=True)
-    shopify_uom = fields.Many2one("product.uom", string="UOM", help="UOM of product",
+    shopify_uom = fields.Many2one("uom.uom", string="UOM", help="UOM of product",
                                   related="product_variant_id.uom_id", readonly=True)
     meta_fields_ids = fields.Many2many("shopify.metafields",
-                                     help="Enter Shopify Variant Metafields", track_visibility='onchange')
-    # check_multi_click = fields.Boolean("Multi Click", help="Check Multi Click?", track_visibility='onchange', readonly=True)
+                                     help="Enter Shopify Variant Metafields", tracking=True)
+    # check_multi_click = fields.Boolean("Multi Click", help="Check Multi Click?", tracking=True, readonly=True)
     last_updated_date = fields.Datetime(string='Last Updated Date', readonly=True)
 
-    @api.multi
     def export_shopify_variant(self):
         '''
         This method gets called by export variant button and
@@ -64,7 +64,6 @@ class ShopifyProductProduct(models.Model):
             shopify_config_rec = rec.shopify_config_id
             shopify_config_rec.export_prod_variant(rec)
 
-    @api.multi
     def update_shopify_variant(self):
         '''
         Process shopify product variant updation from odoo to shopify
@@ -76,7 +75,7 @@ class ShopifyProductProduct(models.Model):
             else it will throw validation error.
         4. Set all the fields values on shopify product variant and save the shopify product variant object.
         '''
-        self.shopify_config_id.test_connection()
+        self.shopify_config_id.check_connection()
         for rec in self:
             record_id = rec.id
             product_tmpl_rec = rec.product_template_id
@@ -93,7 +92,7 @@ class ShopifyProductProduct(models.Model):
                 try:
                     product_variant_price = rec.lst_price
                     shopify_product_variant_id = rec.shopify_product_id
-                    product_variant_image = product_variant_rec.image.decode("utf-8") if product_variant_rec.image else False
+                    product_variant_image = product_variant_rec.image_1920.decode("utf-8") if product_variant_rec.image_1920 else False
                     product_variant_metafields = rec.meta_fields_ids
                     product_variant_metafields_key_list = [mt.key for mt in product_variant_metafields]
                     shopify_product_template_id = str(rec.shopify_product_template_id.shopify_prod_tmpl_id)
@@ -113,7 +112,7 @@ class ShopifyProductProduct(models.Model):
                             raise ValidationError(_("Product doesnot exist on Shopify. Kindly contact to your administrator !")) 
 
                         count = 1
-                        for value in product_variant_rec.attribute_value_ids:
+                        for value in product_variant_rec.product_template_attribute_value_ids:
                             # shopify_prod.'option' + str(count) = value.name
                             opt_cmd = 'shopify_product_variant.option' + str(count) + " = '" + str(value.name) +"'"
                             exec(opt_cmd)
@@ -190,7 +189,6 @@ class ShopifyProductProduct(models.Model):
                 _("You cannot create multiple records for same shopify configuration"))
         return res
 
-    @api.multi
     def write(self, vals):
         '''
         Prevent the user to update a shopify product product record with the same shopify config.
@@ -207,11 +205,3 @@ class ShopifyProductProduct(models.Model):
                 raise ValidationError(
                     _("You cannot create multiple records for same shopify configuration"))
         return res
-
-#     @api.multi
-#     def unlink(self):
-#         for rec in self:
-#             if rec.shopify_product_id:
-#                 raise ValidationError(
-#                     _("You cannot delete an already exported shopify product variant!"))
-#         return super(AccountInvoiceLine, self).unlink()

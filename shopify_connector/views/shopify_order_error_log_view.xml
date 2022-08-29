@@ -53,8 +53,8 @@
                     <field name="date"/>
                     <field name="shopify_config_id"/>
                     <group expand="0" string="Group By">
-                        <filter string="Company" context="{'group_by': 'company_id'}"/>
-                        <filter string="Shopify Config" context="{'group_by': 'shopify_config_id'}"/>
+                        <filter string="Company" name="company_id" context="{'group_by': 'company_id'}"/>
+                        <filter string="Shopify Config" name="shopify_config_id" context="{'group_by': 'shopify_config_id'}"/>
                     </group>
                 </search>
             </field>
@@ -63,7 +63,6 @@
         <record id="action_shopify_order_error_log" model="ir.actions.act_window">
             <field name="name">Shopify Order Error Log</field>
             <field name="res_model">shopify.order.error.log</field>
-            <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="search_view_id" ref="shopify_connector.view_shopify_order_error_log_search"/>
         </record>

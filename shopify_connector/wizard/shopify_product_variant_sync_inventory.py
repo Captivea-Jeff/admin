@@ -8,7 +8,6 @@ from odoo import models, fields, api, _
 class ShopifyVariantInventorySync(models.TransientModel):
     _name = 'shopify.variant.inventory.sync'
 
-    @api.multi
     def shopify_product_variant_inventory_sync(self):
         shopify_prod_obj = self.env['shopify.product.product']
         stock_quant_obj = self.env['stock.quant']
@@ -21,7 +20,7 @@ class ShopifyVariantInventorySync(models.TransientModel):
                 shopify_variant_id = prod
                 inventory_item_id = prod.shopify_inventory_item_id
                 shopify_config_id = prod.shopify_config_id.id
-                prod.shopify_config_id.test_connection()
+                prod.shopify_config_id.check_connection()
                 shopify_locations_records = self.env['shopify.locations'].sudo().search(
                                         [('shopify_config_id', '=', shopify_config_id)])
                 for shopify_locations_record in shopify_locations_records:

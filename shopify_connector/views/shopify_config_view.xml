@@ -13,9 +13,9 @@
                         <button name="export_products_to_shopify" type="object"
                             class="oe_highlight" string="Export Products"
                             groups="shopify_connector.group_shopify_admin"/>
-                        <!-- <button name="test_import_orders" type="object" 
+                        <!--<button name="test_import_orders" type="object"
                             class="oe_highlight" string="Import Orders"
-                            groups="shopify_connector.group_shopify_admin"/> -->
+                            groups="shopify_connector.group_shopify_admin"/>-->
                         <!--  <button name="test_import_locations" type="object"
                             class="oe_highlight" string="Import Location"/> -->
                         <button name="export_new_shopify_variants" type="object"
@@ -90,7 +90,6 @@
         <record id="action_shopify_config" model="ir.actions.act_window">
             <field name="name">Shopify Configuration</field>
             <field name="res_model">shopify.config</field>
-            <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="search_view_id" ref="shopify_connector.view_shopify_config_search"/>
         </record>

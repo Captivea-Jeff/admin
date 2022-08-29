@@ -7,15 +7,11 @@
             <field name="arch" type="xml">
                 <form name="shopify_locations">
                     <sheet>
-                        <div class="oe_button_box" name="button_box">
-                            <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-check">
-                                <field name="active" widget="boolean_button" options='{"terminology": "active"}'/>
-                            </button>
-                        </div>
                         <h1><field name="name" placeholder="Location Name"/></h1>
                         <group>
                             <group>
-                                    <field name="shopify_config_id" options="{'no_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                                <field name="shopify_config_id" options="{'no_create': True, 'no_create_edit': True, 'no_open': True}"/>
+                                <field name="active" widget="boolean_toggle"/>
                             </group>
                             <group>
                                 <field name="shopify_location_id"/>
@@ -58,6 +54,7 @@
                     <field name="name"/>
                     <field name="shopify_config_id"/>
                     <field name="shopify_location_id"/>
+                    <field name="active" widget="boolean_toggle"/>
                 </tree>
             </field>
         </record>
@@ -76,7 +73,6 @@
         <record id="action_shopify_locations" model="ir.actions.act_window">
             <field name="name">Shopify Locations</field>
             <field name="res_model">shopify.locations</field>
-            <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="search_view_id" ref="shopify_connector.view_shopify_locations_search"/>
         </record>

@@ -9,12 +9,12 @@ class ShopifyProdTags(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin', 'portal.mixin']
 
     name = fields.Char('Name', help='Enter Name',
-                       track_visibility='onchange', required=True)
+                       tracking=True, required=True)
     shopify_config_ids = fields.Many2many('shopify.config', string='Shopify Configurations',
-                                          help='Enter Shopify Configurations', track_visibility='onchange', required=True)
+                                          help='Enter Shopify Configurations', tracking=True, required=True)
     color = fields.Integer('Color', help='Enter the Color',
-                           track_visibility='onchange')
+                           tracking=True)
     is_province = fields.Boolean(
-        'Province', help='Province Yes/No', track_visibility='onchange')
+        'Province', help='Province Yes/No', tracking=True)
     active = fields.Boolean('Active', help='Active Yes/No',
-                            track_visibility='onchange', default=True)
+                            tracking=True, default=True)

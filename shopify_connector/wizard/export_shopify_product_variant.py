@@ -7,7 +7,6 @@ from odoo import models, fields, api, _
 class ShopifyVariantExport(models.TransientModel):
     _name = 'export.shopify.variant'
 
-    @api.multi
     def export_shopify_product_variant(self):
         shopify_prod_obj = self.env['shopify.product.product']
         for rec in self:
@@ -20,3 +19,14 @@ class ShopifyVariantExport(models.TransientModel):
                 if (count % 2 == 0):
                     time.sleep(0.5)
                 count += 1
+    
+    
+    def action_shopify_product_variant_export(self):
+         view_id = self.env.ref('shopify_connector.shopify_product_variant_export_action').id
+         return {
+                 'type' : 'ir.actions.act_window',
+                 'view_mode': 'form',
+                 'target': 'new',
+                 'res_id': view_id,
+                 'res_model': 'export.shopify.variant',
+             }

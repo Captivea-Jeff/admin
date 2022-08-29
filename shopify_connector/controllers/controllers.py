@@ -45,9 +45,9 @@ class ShopifyOdooConnector(http.Controller):
                     if allow_import:
                         shopify_config_rec = request.env['shopify.config'].sudo().search([('name', '=', config_name)], limit=1)
                         if shopify_config_rec:
-                            shopify_config_rec.test_connection()
+                            shopify_config_rec.check_connection()
                             order_company = shopify_config_rec.get_shopify_order_company(shopify_order_id)
-                            shopify_config_rec.sudo(order_company.shopify_user_id.id).import_order(
+                            shopify_config_rec.with_user(order_company.shopify_user_id.id).import_order(
                                 shopify_order_id, order_company, allow_import)
                         else:
                             _logger.error("%s config record not found*******", config_name)
