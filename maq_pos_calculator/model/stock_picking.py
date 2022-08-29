@@ -2,19 +2,18 @@
 # Part of Bistasolutions. See LICENSE file for full copyright and licensing details.
 import logging
 from odoo import api, fields, models, tools, _
-from odoo.addons import decimal_precision as dp
 
 _logger = logging.getLogger(__name__)
 
 
 class StockPicking(models.Model):
     _inherit = "stock.picking"
-    ordered_equivalent = fields.Float(string="Ordered Equivalent", compute="_compute_ordered_shipped_equivalent",
-                                      digits=dp.get_precision('Weight Precision Three'))
-    shipped_equivalent = fields.Float(string="Shipped Equivalent", compute="_compute_ordered_shipped_equivalent",
-                                      digits=dp.get_precision('Weight Precision Three'))
 
-    @api.multi
+    ordered_equivalent = fields.Float(string="Ordered Equivalent", compute="_compute_ordered_shipped_equivalent",
+                                      digits='Weight Precision Three')
+    shipped_equivalent = fields.Float(string="Shipped Equivalent", compute="_compute_ordered_shipped_equivalent",
+                                      digits='Weight Precision Three')
+
     @api.depends('move_lines')
     def _compute_ordered_shipped_equivalent(self):
         for rec in self:
