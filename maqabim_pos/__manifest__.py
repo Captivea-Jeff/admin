@@ -25,11 +25,15 @@ Maqabim Distributors: Point Of Sale customizations
     "author": "Odoo Inc",
     'website': "https://www.odoo.com",
     'category': 'Custom Development',
-    'version': '0.1',
+    'version': '0.5',
     'depends': ['point_of_sale'],
-    'data': [
-        'views/templates.xml',
-    ],
-    'qweb': ['static/src/xml/pos.xml'],
+    'assets': {
+        'web.assets_qweb': [
+            'maqabim_pos/static/src/xml/pos.xml',
+        ],
+        'point_of_sale.assets': [
+            'maqabim_pos/static/src/js/pos.js',
+        ],
+    },
     'license': 'OEEL-1',
 }
