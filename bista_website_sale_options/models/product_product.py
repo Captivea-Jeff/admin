@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from odoo import models, fields, api
-
+from odoo import models, fields, api, _
+from odoo.exceptions import ValidationError
 
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
@@ -13,8 +13,8 @@ class ProductTemplate(models.Model):
         for rec in self:
             values = []
             for product_variant_id in rec.product_variant_ids:
-                if not product_variant_id.is_website_publish:
-                    values += [str(product_variant_id.id)]
+                if product_variant_id.website_published:
+                    values.append(product_variant_id.id)
             return values
 
 
