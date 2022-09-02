@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Export Shopify Product Variant -->
+    <record id="export_shopify_product_variant_view" model="ir.ui.view">
+        <field name="name">export.shopify.product.variant.view</field>
+        <field name="model">export.shopify.variant</field>
+        <field name="arch" type="xml">
+            <form string="Shopify Product Variant Export">
+                <span>Do you want to export the selected variants on shopify?</span>
+                <footer>
+                    <button string="Export" name="export_shopify_product_variant" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action to add the Menu on the Action Menu List which appears on Selection of single or multiple product templates -->
+    <record id="shopify_product_variant_export_action" model="ir.actions.act_window">
+        <field name="name">Export Shopify Variant</field>
+        <field name="res_model">export.shopify.variant</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="export_shopify_product_variant_view"/>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="shopify_connector.model_shopify_product_product" />
+        <field name="binding_view_types">list,form</field>
+    </record>
+    
+<!--     <record id="ir_actions_server_shopify_product_variant_export" model="ir.actions.server">
+        <field name="name">Export Shopify Variant</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="model_export_shopify_variant"/>
+        <field name="state">code</field>
+        <field name="code">
+            if records:
+                action = records.action_shopify_product_variant_export()
+        </field>
+        <field name="binding_model_id" ref="shopify_connector.model_shopify_product_product" />
+        <field name="binding_view_types">list,form</field>
+    </record> -->
+
+</odoo>
