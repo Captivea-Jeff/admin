@@ -1,3 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-maqabim_purchase.access_label_report_wizard,access_label_report_wizard,maqabim_purchase.model_label_report_wizard,base.group_user,1,1,1,1
-maqabim_purchase.access_product_print_label,access_product_print_label,maqabim_purchase.model_product_print_label,base.group_user,1,1,1,1
