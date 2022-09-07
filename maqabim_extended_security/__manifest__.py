@@ -17,7 +17,7 @@ Maqabim Distributors: Custom access rights
         'security/ir.model.access.csv',
         'views/res_users_views.xml',
         'views/point_of_sale_views.xml',
-        'views/purchase_views.xml'
+        'views/purchase_views.xml',
     ],
     'license': 'OEEL-1',
 }
