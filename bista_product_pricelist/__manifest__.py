@@ -3,7 +3,7 @@
 
 {
     "name": "Bista Product Price",
-    "version": "2.0",
+    "version": "3.0",
     "author": "Bista Solutions Pvt. Ltd.",
     "maintainer": "Bista Solutions Pvt. Ltd.",
     "website": "https://www.bistasolutions.com",
