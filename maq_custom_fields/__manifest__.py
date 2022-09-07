@@ -2,7 +2,7 @@
 
 {
     "name": "Bista Maq Custom Fields",
-    "version": "15.0.1.0.0",
+    "version": "15.0.1.0.22",
     "author": "Bista Solutions Pvt. Ltd.",
     "maintainer": "Bista Solutions Pvt. Ltd.",
     "website": "https://www.bistasolutions.com",
